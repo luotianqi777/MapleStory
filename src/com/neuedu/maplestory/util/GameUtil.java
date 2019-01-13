@@ -7,14 +7,14 @@ import java.net.URL;
 import javax.imageio.ImageIO;
 
 /**
- * Tool Class
+ * Tool Class: Load Source File
  * 
  * @author Lain
  *
  */
 
 public class GameUtil {
-
+	
 	/**
 	 * Load Image Method
 	 * 

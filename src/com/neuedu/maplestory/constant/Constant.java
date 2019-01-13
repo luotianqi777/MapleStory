@@ -41,10 +41,10 @@ public class Constant {
 					GameUtil.getImage("com/neuedu/maplestory/img/hero/shoot_r/shoot1_3.png") };
 			
 			public static Image[] l = new Image[] {
-					GameUtil.getImage("com/neuedu/maplestory/img/hero/walk_l/shoot1_0.png"),
-					GameUtil.getImage("com/neuedu/maplestory/img/hero/walk_l/shoot1_1.png"),
-					GameUtil.getImage("com/neuedu/maplestory/img/hero/walk_l/shoot1_2.png"),
-					GameUtil.getImage("com/neuedu/maplestory/img/hero/walk_l/shoot1_3.png") };
+					GameUtil.getImage("com/neuedu/maplestory/img/hero/shoot_l/shoot1_0.png"),
+					GameUtil.getImage("com/neuedu/maplestory/img/hero/shoot_l/shoot1_1.png"),
+					GameUtil.getImage("com/neuedu/maplestory/img/hero/shoot_l/shoot1_2.png"),
+					GameUtil.getImage("com/neuedu/maplestory/img/hero/shoot_l/shoot1_3.png") };
 		}
 
 		static public class stand {
@@ -64,10 +64,12 @@ public class Constant {
 		}
 
 		static public class jump {
-			public static int size = 2;
+			public static int size = 1;
 
-			public static Image r = GameUtil.getImage("com/neuedu/maplestory/img/hero/jump/jump_l.png");
-			public static Image l = GameUtil.getImage("com/neuedu/maplestory/img/hero/jump/jump_r.png");
+			public static Image r = GameUtil.getImage("com/neuedu/maplestory/img/hero/jump/jump_r.png");
+			public static Image l = GameUtil.getImage("com/neuedu/maplestory/img/hero/jump/jump_l.png");
 		}
 	}
+	
+	
 }

@@ -14,12 +14,12 @@ import javax.imageio.ImageIO;
  */
 
 public class GameUtil {
-	
+
 	/**
 	 * Load Image Method
 	 * 
 	 * @param imgPath
-	 * @return
+	 * @return the image of igmPath
 	 */
 	public static Image getImage(String imgPath) {
 		URL u = GameUtil.class.getClassLoader().getResource(imgPath);

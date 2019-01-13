@@ -11,15 +11,19 @@ import com.neuedu.maplestory.constant.Constant;
 import com.neuedu.maplestory.util.GameUtil;
 
 /**
- * Create Frame Of Client: 1.Extends Frame Class 2.Defined LoadFrame Method
- * 3.Write Main Method Load Image on Frame: 1.
+ * Create Frame Of Client:
+ * 
+ * 1.Extends Frame Class
+ * 
+ * 2.Defined LoadFrame Method
+ * 
+ * 3.Write Main Method
  * 
  * @author Lain
  *
  */
 
 public class MapleStoryClient extends Frame {
-
 
 	/**
 	 * Load Frame
@@ -44,16 +48,17 @@ public class MapleStoryClient extends Frame {
 		// 6.Set Background
 	}
 
-	
 	int x = 0;
-	
+
 	/**
 	 * Draw Background Image
 	 */
 	@Override
 	public void paint(Graphics g) {
+		// draw background
 		g.drawImage(Constant.imgBackground, 0, 0, null);
-		g.drawImage(Constant.imgHero.shoot.r[x%Constant.imgHero.shoot.size], x, 300, null);
+		// draw hero
+		g.drawImage(Constant.imgHero.jump.r, x, 300, null);
 		x += 5;
 	}
 
@@ -79,7 +84,6 @@ public class MapleStoryClient extends Frame {
 		}
 	}
 
-	
 	/**
 	 * Main Method
 	 * 
@@ -89,13 +93,11 @@ public class MapleStoryClient extends Frame {
 		new MapleStoryClient();
 	}
 
-	
 	public MapleStoryClient() {
 		// load frame
 		loadFrame();
 		new Thread(new FlushThread()).start();
 	}
-	
 
 	// 解决图片闪烁的问题，用双缓冲方法解决闪烁问题
 	Image backImg = null;

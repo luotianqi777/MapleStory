@@ -4,8 +4,12 @@ import java.awt.Color;
 import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+
+import javax.net.ssl.SSLEngineResult.HandshakeStatus;
 
 import com.neuedu.maplestory.constant.Constant;
 import com.neuedu.maplestory.util.GameUtil;
@@ -23,7 +27,8 @@ import com.neuedu.maplestory.util.GameUtil;
  *
  */
 
-public class MapleStoryClient extends Frame {
+@SuppressWarnings("serial")
+public class MapleStoryClient extends Frame implements KeyListener {
 
 	/**
 	 * Load Frame
@@ -45,21 +50,94 @@ public class MapleStoryClient extends Frame {
 		});
 		// 5.Set frame Title
 		this.setTitle("Neuedu_MapleStory");
-		// 6.Set Background
+		// 6.add key Listener
+		this.addKeyListener(this);
+
 	}
 
-	int x = 0;
+	public enum MOD {
+		SHOOT, WALK, STAND, JUMP
+	};
+
+	public enum DIRE {
+		LEFT, RIGHT
+	}
+
+	static class HeroArgs {
+
+		public static int count = 1;
+		public static int x = 200;
+		public static int y = 200;
+		public static final int speed = 10;
+		public static MOD mod = MOD.STAND;
+		public static DIRE dire = DIRE.RIGHT;
+	}
 
 	/**
 	 * Draw Background Image
 	 */
 	@Override
-	public void paint(Graphics g) {
+	public void  paint(Graphics g) {
 		// draw background
-		g.drawImage(Constant.imgBackground, 0, 0, null);
+		g.drawImage(GameUtil.imgBackground, 0, 0, null);
 		// draw hero
-		g.drawImage(Constant.imgHero.jump.r, x, 300, null);
-		x += 5;
+		if (HeroArgs.count > 0) {
+			HeroArgs.count--;
+		}
+		Image imgHero = null;
+		if (HeroArgs.mod == MOD.JUMP) {
+			if (HeroArgs.dire == DIRE.LEFT) {
+				imgHero = GameUtil.imgHero.jump.l;
+			} else {
+				imgHero = GameUtil.imgHero.jump.r;
+			}
+		} else {
+			switch (HeroArgs.mod) {
+			case SHOOT:
+				switch (HeroArgs.dire) {
+				case LEFT:
+					imgHero = GameUtil.imgHero.shoot.l[HeroArgs.count];
+					break;
+				case RIGHT:
+					imgHero = GameUtil.imgHero.shoot.r[HeroArgs.count];
+					break;
+				}
+				break;
+			case STAND:
+				switch (HeroArgs.dire) {
+				case LEFT:
+					imgHero = GameUtil.imgHero.stand.l[HeroArgs.count];
+					break;
+				case RIGHT:
+					imgHero = GameUtil.imgHero.stand.r[HeroArgs.count];
+					break;
+				}
+				break;
+			case WALK:
+				switch (HeroArgs.dire) {
+				case LEFT:
+					imgHero = GameUtil.imgHero.walk.l[HeroArgs.count];
+					HeroArgs.x -= HeroArgs.speed;
+					break;
+				case RIGHT:
+					imgHero = GameUtil.imgHero.walk.r[HeroArgs.count];
+					HeroArgs.x += HeroArgs.speed;
+					break;
+				}
+				break;
+			default:
+				break;
+			}
+		}
+		g.drawImage(imgHero, HeroArgs.x, HeroArgs.y, null);
+		if(HeroArgs.count!=0){
+			try {
+				Thread.sleep(30);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 
 	/**
@@ -73,7 +151,7 @@ public class MapleStoryClient extends Frame {
 		public void run() {
 			// repaint
 			for (;;) {
-				repaint();
+					repaint();
 				try {
 					// fps 25
 					Thread.sleep(40);
@@ -99,6 +177,8 @@ public class MapleStoryClient extends Frame {
 		new Thread(new FlushThread()).start();
 	}
 
+	
+	
 	// 解决图片闪烁的问题，用双缓冲方法解决闪烁问题
 	Image backImg = null;
 
@@ -118,5 +198,67 @@ public class MapleStoryClient extends Frame {
 		// 调用虚拟图片的paint()方法，每50ms刷新一次
 		paint(backg);
 		g.drawImage(backImg, 0, 0, null);
+	}
+	
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+
+		switch (e.getKeyCode()) {
+		case KeyEvent.VK_A:
+			HeroArgs.mod = MOD.WALK;
+			HeroArgs.dire = DIRE.LEFT;
+			HeroArgs.count = GameUtil.imgHero.walk.size;
+			break;
+		case KeyEvent.VK_D:
+			HeroArgs.mod = MOD.WALK;
+			HeroArgs.dire = DIRE.RIGHT;
+			HeroArgs.count = GameUtil.imgHero.walk.size;
+			break;
+		case KeyEvent.VK_J:
+			HeroArgs.mod = MOD.SHOOT;
+			HeroArgs.count = GameUtil.imgHero.walk.size;
+			break;
+		case KeyEvent.VK_K:
+			HeroArgs.mod = MOD.JUMP;
+			HeroArgs.count = GameUtil.imgHero.walk.size;
+			break;
+		default:
+			HeroArgs.mod = MOD.STAND;
+			HeroArgs.count = GameUtil.imgHero.stand.size;
+			break;
+		}
+		HeroArgs.count--;
+
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+
+		HeroArgs.mod = MOD.STAND;
+		HeroArgs.count = GameUtil.imgHero.stand.size - 1;
+//		switch (e.getKeyCode()) {
+//		case KeyEvent.VK_W:
+//			break;
+//		case KeyEvent.VK_S:
+//			break;
+//		case KeyEvent.VK_A:
+//			break;
+//		case KeyEvent.VK_D:
+//			break;
+//		case KeyEvent.VK_J:
+//			break;
+//		case KeyEvent.VK_K:
+//			break;
+//		default:
+//			break;
+//		}
+
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+		// TODO Auto-generated method stub
+
 	}
 }

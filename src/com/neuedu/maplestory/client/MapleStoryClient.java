@@ -1,13 +1,17 @@
 package com.neuedu.maplestory.client;
 
 import java.awt.Frame;
+import java.awt.Graphics;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+
+import com.neuedu.maplestory.util.GameUtil;
 
 /**
- * 运行冒险岛项目主文件，客户端 生成窗口 
- * 1.extends Frame类库 
- * 2.自定义加载窗口的方法
- * 3.主函数启动窗口
- * 
+ * Create Frame Of Client: 1.Extends Frame Class 2.Defined LoadFrame Method
+ * 3.Write Main Method
+ * Load Image on Frame:
+ * 1.
  * @author Lain
  *
  */
@@ -15,32 +19,50 @@ import java.awt.Frame;
 public class MapleStoryClient extends Frame {
 
 	/**
-	 * 加载窗口的方法
+	 * Load Frame
 	 */
 	void loadFrame() {
-		// 设置窗口大小
-		this.setSize(1920, 1080);
-		// 设置窗口生成时的位置
-		this.setLocation(0, 0);
-		// 显示窗口
+		// 1.set size
+		this.setSize(1500, 900);
+		// 2.set frame location
+		this.setLocationRelativeTo(null);
+		// 3.Load frame
 		this.setVisible(true);
-		// 设置可关闭
+		// 4.Set Closable
+		this.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				// close frame
+				System.exit(0);
+			}
+		});
+		// 5.Set frame Title
+		this.setTitle("Neuedu_MapleStory");
+		// 6.Set Background
 	}
 
 	/**
-	 * 主函数
+	 * Draw Background Image
+	 */
+	@Override
+	public void paint(Graphics g) {
+		// TODO Auto-generated method stub
+		String imgPath = "com/neuedu/maplestory/img/test.jpg";
+		g.drawImage(GameUtil.getImage(imgPath), 0, 0, null);
+	}
+	
+	/**
+	 * Main Method
 	 * 
 	 * @param args
 	 */
 	public static void main(String[] args) {
 		new MapleStoryClient();
 	}
-	
-	/**
-	 * 构造方法
-	 */
+
 	public MapleStoryClient() {
 		// TODO Auto-generated constructor stub
+		// load frame
 		loadFrame();
 	}
 }

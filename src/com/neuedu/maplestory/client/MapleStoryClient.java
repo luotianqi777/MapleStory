@@ -4,8 +4,8 @@ import java.awt.Graphics;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
+import com.neuedu.maplestory.entity.Background;
 import com.neuedu.maplestory.entity.Hero;
-import com.neuedu.maplestory.img.Img;
 import com.neuedu.maplestory.util.FrameUtil;
 
 /**
@@ -18,11 +18,12 @@ import com.neuedu.maplestory.util.FrameUtil;
 public class MapleStoryClient extends FrameUtil {
 
 	private Hero hero = new Hero();
+	private Background backGround = new Background();
 
 	@Override
 	public void paint(Graphics g) {
 		// draw background
-		g.drawImage(Img.imgBackground, 0, 0, null);
+		backGround.draw(g);
 		hero.draw(g);
 	}
 

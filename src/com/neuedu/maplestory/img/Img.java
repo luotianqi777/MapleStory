@@ -5,7 +5,7 @@ import java.awt.Image;
 import com.neuedu.maplestory.util.GameUtil;
 
 public class Img {
-	public static Image imgBackground = GameUtil.getImage("com/neuedu/maplestory/img/background/snow.png");
+	public static Image imgBackground = GameUtil.getImage("com/neuedu/maplestory/img/background/BackGround.png");
 
 	public static class imgHero {
 		public static class walk {

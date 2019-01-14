@@ -38,7 +38,7 @@ public class MapleStoryClient extends FrameUtil {
 			public void keyPressed(KeyEvent e) {
 				hero.keyPressed(e);
 			}
-			
+
 			@Override
 			public void keyReleased(KeyEvent e) {
 				hero.keyReleased(e);

@@ -4,7 +4,7 @@ import java.awt.Graphics;
 import java.awt.Image;
 
 import com.neuedu.maplestory.constant.Constant;
-import com.neuedu.maplestory.img.Img;
+import com.neuedu.maplestory.util.ImageUtil;
 
 public class Background {
 	
@@ -23,7 +23,7 @@ public class Background {
 	}
 
 	public Background() {
-		this(Img.imgBackground, 0, 0);
+		this(ImageUtil.imgBackground, 0, 0);
 		this.y = Constant.GAME_HEIGHT - this.height;
 	}
 

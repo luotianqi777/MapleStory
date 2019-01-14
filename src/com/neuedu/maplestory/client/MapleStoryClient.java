@@ -18,7 +18,7 @@ import com.neuedu.maplestory.util.FrameUtil;
 public class MapleStoryClient extends FrameUtil {
 
 	private Hero hero = new Hero();
-	private Background backGround = new Background();
+	static public Background backGround = new Background();
 
 	@Override
 	public void paint(Graphics g) {

@@ -7,8 +7,9 @@ package com.neuedu.maplestory.constant;
  *
  */
 public class Constant {
-	public static final int GAME_WIDTH = 1900;
-	public static final int GAME_HEIGHT = 1080;
+	public static final int GAME_WIDTH = 1200;
+	public static final int GAME_HEIGHT = 900;
 	public static final double G = 9.8;
+	public static final int HERO_SPEED = 15;
 
 }

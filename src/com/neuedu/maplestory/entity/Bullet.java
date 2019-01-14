@@ -23,7 +23,7 @@ public class Bullet {
 	}
 
 	public Bullet(int x, int y, double angle) {
-		this(ImageUtil.imgBullet.img, x, y, angle, 25);
+		this(ImageUtil.imgBullet.norml, x, y, angle, 25);
 	}
 
 	public Bullet() {

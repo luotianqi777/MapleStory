@@ -7,12 +7,13 @@ import com.neuedu.maplestory.constant.Constant;
 import com.neuedu.maplestory.util.ImageUtil;
 
 public class Background {
-	
+
 	public Image img;
 	public int x;
 	public int y;
 	public int height;
 	public int weight;
+	private int speed;
 
 	public Background(Image img, int x, int y) {
 		this.img = img;
@@ -20,6 +21,7 @@ public class Background {
 		this.y = y;
 		this.height = img.getHeight(null);
 		this.weight = img.getWidth(null);
+		this.speed = Constant.HERO_SPEED;
 	}
 
 	public Background() {
@@ -30,6 +32,22 @@ public class Background {
 	public void draw(Graphics g) {
 		g.drawImage(img, x, y, null);
 	}
-	
+
+	public void move(Direction direction) {
+		switch (direction) {
+		case left:
+			this.x -= speed;
+			if (x < Constant.GAME_WIDTH - this.weight) {
+				x = Constant.GAME_WIDTH - this.weight;
+			}
+			break;
+		case right:
+			this.x += speed;
+			if (x > 0) {
+				x = 0;
+			}
+			break;
+		}
+	}
 
 }

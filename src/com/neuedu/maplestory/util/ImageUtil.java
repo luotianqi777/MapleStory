@@ -12,7 +12,7 @@ import com.neuedu.maplestory.util.GameUtil;
 
 public class ImageUtil {
 
-	public static Image imgBackground = GameUtil.getImage("com/neuedu/maplestory/img/background/snow.png");
+	public static Image imgBackground = GameUtil.getImage("com/neuedu/maplestory/img/background/BackGround.png");
 
 	public static class imgHero {
 		public static class walk {
@@ -100,12 +100,15 @@ public class ImageUtil {
 	public static class imgBullet {
 		
 		public static final int size = 1;
+
+		public static Image[] norml = new Image[size];
 		
-		public static Image[] img = new Image[size];
+		public static Image[] skill = new Image[size];
 
 		static {
 			for (int i = 0; i < size; i++) {
-				img[i] = GameUtil.getImage("com/neuedu/maplestory/img/bullet/bullet1_" + i + ".png");
+				norml[i] = GameUtil.getImage("com/neuedu/maplestory/img/bullet/bullet2_" + i + ".png");
+				skill[i] = GameUtil.getImage("com/neuedu/maplestory/img/bullet/bullet1_" + i + ".png");
 			}
 		}
 

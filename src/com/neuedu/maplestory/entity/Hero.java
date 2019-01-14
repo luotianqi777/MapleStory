@@ -6,6 +6,7 @@ import java.awt.event.KeyEvent;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.neuedu.maplestory.client.MapleStoryClient;
 import com.neuedu.maplestory.constant.Constant;
 import com.neuedu.maplestory.util.ImageUtil;
 
@@ -37,7 +38,7 @@ public class Hero {
 		this.skill = false;
 		this.dire = Direction.right;
 		this.action = Action.stand;
-		this.speed = 10;
+		this.speed = Constant.HERO_SPEED;
 
 		try {
 			this.width = img[0].getWidth(null);
@@ -51,7 +52,7 @@ public class Hero {
 
 	public Hero() {
 		this(ImageUtil.imgHero.stand.l, 800, 0);
-		this.y = Constant.GAME_HEIGHT - this.height - 140;
+		this.y = Constant.GAME_HEIGHT - this.height - 25;
 	}
 
 	/**
@@ -98,6 +99,8 @@ public class Hero {
 				}
 				if (shoot) {
 					img = ImageUtil.imgHero.shoot.l;
+				} else if (skill) {
+					img = ImageUtil.imgHero.skill.l;
 				} else {
 					img = ImageUtil.imgHero.jump.l;
 				}
@@ -125,6 +128,8 @@ public class Hero {
 				}
 				if (shoot) {
 					img = ImageUtil.imgHero.shoot.r;
+				} else if (skill) {
+					img = ImageUtil.imgHero.skill.r;
 				} else {
 					img = ImageUtil.imgHero.jump.r;
 				}
@@ -146,52 +151,61 @@ public class Hero {
 	 */
 	public void outOfBounds() {
 
-		// left bounds
+		// left bound
 		if (x < 0) {
 			x = 0;
+			MapleStoryClient.backGround.move(Direction.right);
 		}
 
-		// right bounds
+		// right bound
 		if (x > Constant.GAME_WIDTH - this.width) {
 			x = Constant.GAME_WIDTH - this.width;
+			MapleStoryClient.backGround.move(Direction.left);
 		}
+
+		// bullets out of bound
+		bullets.removeIf((e) -> {
+			return e.Die();
+		});
 	}
 
 	/**
 	 * jump_Args
 	 */
-	public double v0 = 40;
-	public double vt = 0;
-	public static final double g = Constant.G;
-	public double t = 0.5;
-	public double delta_height = 0;
-	public boolean jump_up = true;
-	public int sy;
+	static class Jump {
+		public static double v0 = 40;
+		public static double vt = 0;
+		public static final double g = Constant.G;
+		public static double t = 0.5;
+		public static double delta_height = 0;
+		public static boolean jump_up = true;
+		public static int sy;
+	}
 
 	/**
 	 * jump Method
 	 */
 	public void jump() {
-		if (jump_up) {
-			vt = v0 - g * t;
-			delta_height = v0 * t;
-			v0 = vt;
-			y -= delta_height;
-			if (vt <= 0) {
-				jump_up = false;
-				vt = 0;
-				v0 = 0;
+		if (Jump.jump_up) {
+			Jump.vt = Jump.v0 - Jump.g * Jump.t;
+			Jump.delta_height = Jump.v0 * Jump.t;
+			Jump.v0 = Jump.vt;
+			y -= Jump.delta_height;
+			if (Jump.vt <= 0) {
+				Jump.jump_up = false;
+				Jump.vt = 0;
+				Jump.v0 = 0;
 			}
 		} else {
-			vt = v0 + g * t;
-			delta_height = v0 * t;
-			v0 = vt;
-			y += delta_height;
-			if (y >= sy) {
-				y = sy;
+			Jump.vt = Jump.v0 + Jump.g * Jump.t;
+			Jump.delta_height = Jump.v0 * Jump.t;
+			Jump.v0 = Jump.vt;
+			y += Jump.delta_height;
+			if (y >= Jump.sy) {
+				y = Jump.sy;
 				this.jump = false;
-				v0 = 40;
-				vt = 0;
+				Jump.v0 = 40;
+				Jump.vt = 0;
 			}
 		}
 	}
@@ -226,18 +240,15 @@ public class Hero {
 		for (Bullet bullet : bullets) {
 			bullet.move();
 		}
-		bullets.removeIf((e) -> {
-			return e.Die();
-		});
 	}
 
 	/**
 	 * skill
 	 */
 	void skill() {
-		final int counts = 36;
+		final int counts = 10;
 		for (int i = 0; i <= counts; i++) {
-			bullets.add(new Bullet(this.x, this.y, -Math.PI * 2 / counts * i));
+			bullets.add(new Bullet(ImageUtil.imgBullet.skill, this.x, this.y, -Math.PI / counts * i, 20));
 		}
 	}
 
@@ -278,15 +289,15 @@ public class Hero {
 			right = true;
 			break;
 		case KeyEvent.VK_J:
-			if(!shoot){
+			if (!shoot) {
 				shoot();
 			}
 			shoot = true;
 			break;
 		case KeyEvent.VK_K:
 			if (!jump) {
-				sy = y;
-				jump_up = true;
+				Jump.sy = y;
+				Jump.jump_up = true;
 				jump = true;
 			}
 			break;

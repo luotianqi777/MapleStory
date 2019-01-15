@@ -2,6 +2,7 @@ package com.neuedu.maplestory.entity;
 
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.Rectangle;
 
 import com.neuedu.maplestory.client.MapleStoryClient;
 
@@ -10,17 +11,19 @@ public abstract class MobBase extends NPC implements Bloodable {
 	protected boolean walk, hit;
 	protected MobAction action;
 	protected int count;
+	protected int attack;
 
-	MobBase(Image[] img, int x, int y, Direction dire, int MAX_HP, int speed) {
+	MobBase(Image[] img, int x, int y, Direction dire, int MAX_HP, int speed, int attack) {
 		super(img, x, y, MAX_HP, speed, dire);
 		this.walk = false;
 		this.hit = false;
 		this.action = MobAction.WALK;
+		this.attack = attack;
 		this.count = 0;
 	}
 
 	public MobBase() {
-		this(null, 0, 0, Direction.LEFT, 100, 0);
+		this(null, 0, 0, Direction.LEFT, 100, 0, 0);
 	}
 
 	@Override
@@ -43,7 +46,16 @@ public abstract class MobBase extends NPC implements Bloodable {
 		}
 	}
 
-	abstract boolean hit(Hero hero);
+	public boolean hit(Hero hero) {
+
+		if (this.getRectangle().intersects(hero.getRectangle())) {
+			hero.HP -= attack;
+		}
+		if (hero.HP <= 0) {
+			hero.die();
+		}
+		return false;
+	}
 
 	public void die() {
 		this.die = true;
@@ -63,4 +75,11 @@ public abstract class MobBase extends NPC implements Bloodable {
 			this.dire = Direction.LEFT;
 		}
 	}
+
+	@Override
+	public Rectangle getRectangle() {
+
+		return new Rectangle(x + MapleStoryClient.getBackX(), y, width, height);
+	}
+
 }

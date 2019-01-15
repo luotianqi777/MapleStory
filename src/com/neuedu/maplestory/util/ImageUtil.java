@@ -41,7 +41,7 @@ public class ImageUtil {
 			}
 		}
 
-		static public class shoot {
+		static public class skill {
 
 			public static final int size = 5;
 
@@ -88,8 +88,8 @@ public class ImageUtil {
 			}
 		}
 
-		static public class skill {
-			public static final int size = 6;
+		static public class shoot {
+			public static final int size = 4;
 
 			public static Image[] r = new Image[size];
 

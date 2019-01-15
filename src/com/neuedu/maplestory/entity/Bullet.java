@@ -9,21 +9,14 @@ import com.neuedu.maplestory.client.MapleStoryClient;
 import com.neuedu.maplestory.constant.Constant;
 import com.neuedu.maplestory.util.ImageUtil;
 
-public class Bullet {
-	private Image[] img;
-	private int x, y;
-	private int width, height;
+public class Bullet extends Shape {
 	private double angle;
 	private double speed;
 	private boolean die;
 	private static final int growSpeed = Constant.GROW_SPEED;
 
 	public Bullet(Image[] img, int x, int y, double angle, double speed) {
-		this.img = img;
-		this.x = x;
-		this.y = y;
-		this.width = img[0].getWidth(null);
-		this.height = img[0].getHeight(null);
+		super(img, x, y);
 		this.angle = angle;
 		this.speed = speed;
 		this.die = false;
@@ -76,7 +69,10 @@ public class Bullet {
 	 * @param g
 	 */
 	public void draw(Graphics g) {
-		count %= ImageUtil.imgBullet.size;
+		if (img == null) {
+			return;
+		}
+		count %= img.length;
 		g.drawImage(img[count], x + MapleStoryClient.getBackX(), y, this.width, this.height, null);
 		count++;
 	}
@@ -96,6 +92,10 @@ public class Bullet {
 	 */
 	public boolean isDie() {
 		return die;
+	}
+
+	public void setAngle(double angle) {
+		this.angle = angle;
 	}
 
 	public void addAngle(double angle) {
@@ -128,10 +128,8 @@ public class Bullet {
 		}
 	}
 
-	/**
-	 * get Rectangle
-	 */
+	@Override
 	public Rectangle getRectangle() {
-		return new Rectangle(x, y, width, height);
+		return new Rectangle(x + MapleStoryClient.getBackX(), y, width, height);
 	}
 }

@@ -41,8 +41,7 @@ public class Background extends Shape {
 	}
 
 	public void draw(Graphics g) {
-
-		g.drawImage(img[0], x, y, null);
+		super.draw(g);
 
 		for (Ground ground : grounds) {
 			ground.draw(g);

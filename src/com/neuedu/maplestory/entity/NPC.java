@@ -1,6 +1,5 @@
 package com.neuedu.maplestory.entity;
 
-import java.awt.Graphics;
 import java.awt.Image;
 
 import com.neuedu.maplestory.client.MapleStoryClient;
@@ -87,15 +86,19 @@ public class NPC extends Shape {
 		}
 
 	}
-
-	@Override
-	void draw(Graphics g) {
-
+	
+	public void fallCheck(){
+		if (Jump.jump_up) {
+			fallInit();
+		}
+		fall();
 	}
+	
+	private int fix = 40;
 
 	private Ground getGround() {
 		for (Ground ground : MapleStoryClient.backGround.grounds) {
-			if (this.getRectangle().intersects(ground.getRectangle()) && this.y < ground.y - ground.height + 50) {
+			if (this.getRectangle().intersects(ground.getRectangle()) && this.y < ground.y - ground.height + fix) {
 				return ground;
 			}
 		}
@@ -112,7 +115,7 @@ public class NPC extends Shape {
 
 	public Boolean isOnGround() {
 		for (Ground ground : MapleStoryClient.backGround.grounds) {
-			if (this.getRectangle().intersects(ground.getRectangle()) && this.y < ground.y - ground.height + 50) {
+			if (this.getRectangle().intersects(ground.getRectangle()) && this.y < ground.y - ground.height + fix) {
 				return true;
 			}
 		}

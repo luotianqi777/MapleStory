@@ -68,6 +68,7 @@ public class Hero extends NPC implements Bloodable {
 		}
 
 		if (skill) {
+			skill();
 			this.action = Action.SKILL;
 		}
 
@@ -118,6 +119,10 @@ public class Hero extends NPC implements Bloodable {
 
 				break;
 			case SHOOT:
+				if (left) {
+					fallCheck();
+					x -= speed;
+				}
 				img = ImageUtil.imgHero.shoot.l;
 				break;
 			case JUMP:
@@ -136,6 +141,11 @@ public class Hero extends NPC implements Bloodable {
 				img = ImageUtil.imgHero.stand.l;
 				break;
 			case SKILL:
+				if (left) {
+					fallCheck();
+					fall();
+					x -= speed;
+				}
 				img = ImageUtil.imgHero.skill.l;
 				break;
 			case HIT:
@@ -163,6 +173,10 @@ public class Hero extends NPC implements Bloodable {
 
 				break;
 			case SHOOT:
+				if (right) {
+					fallCheck();
+					x += speed;
+				}
 				img = ImageUtil.imgHero.shoot.r;
 				break;
 			case JUMP:
@@ -181,6 +195,10 @@ public class Hero extends NPC implements Bloodable {
 				img = ImageUtil.imgHero.stand.r;
 				break;
 			case SKILL:
+				if (right) {
+					fallCheck();
+					x += speed;
+				}
 				img = ImageUtil.imgHero.skill.r;
 				break;
 			case HIT:
@@ -228,13 +246,13 @@ public class Hero extends NPC implements Bloodable {
 		switch (this.dire) {
 		case LEFT:
 			for (int i = 0; i < 3; i++) {
-				bullets.add(new Bullet(this.x - this.width - MapleStoryClient.getBackX(), this.y,
+				bullets.add(new Bullet(this.x - this.width - MapleStoryClient.getBackX(), this.y + 10,
 						-abs - Math.PI - Math.PI / 10 * (i - 1)));
 			}
 			break;
 		case RIGHT:
 			for (int i = 0; i < 3; i++) {
-				bullets.add(new Bullet(this.x + this.width * 2 - MapleStoryClient.getBackX(), this.y,
+				bullets.add(new Bullet(this.x + this.width * 2 - MapleStoryClient.getBackX(), this.y + 10,
 						abs - Math.PI / 10 * (i - 1)));
 			}
 			break;
@@ -255,14 +273,15 @@ public class Hero extends NPC implements Bloodable {
 	 * skill
 	 */
 	void skill() {
-		final int counts = 18;
-		for (int i = 0; i <= counts; i++) {
-			bullets.add(new Bullet(ImageUtil.imgBullet.skill, this.x - MapleStoryClient.backGround.x, this.y,
-					-Math.PI * 2 / counts * i, 20));
-		}
-		for (Bullet bullet : bullets) {
-			bullet.grow();
-			bullet.addAngle(Math.PI);
+
+		if (new Random().nextInt(100) < Constant.SKILL_P) {
+			int X = this.x - MapleStoryClient.getBackX();
+			for (Bullet bullet : bullets) {
+				bullet.grow();
+				double atan = (double) (bullet.y - this.y) / (bullet.x - X);
+				atan = Math.atan(atan) + (bullet.x > X ? Math.PI : 0);
+				bullet.setAngle(atan);
+			}
 		}
 	}
 
@@ -336,10 +355,7 @@ public class Hero extends NPC implements Bloodable {
 			}
 			break;
 		case KeyEvent.VK_L:
-			if (!skill) {
-				skill();
-			}
-			skill = true;
+			skill = !skill;
 			break;
 		case KeyEvent.VK_G:
 			shoot = !shoot;
@@ -375,7 +391,6 @@ public class Hero extends NPC implements Bloodable {
 		case KeyEvent.VK_K:
 			break;
 		case KeyEvent.VK_L:
-			skill = false;
 			break;
 		case KeyEvent.VK_W:
 			up = false;

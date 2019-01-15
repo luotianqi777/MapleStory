@@ -7,10 +7,8 @@ import com.neuedu.maplestory.util.ImageUtil;
 
 public class MobSnail extends MobBase {
 
-	private int attack = 4;
-
 	public MobSnail(int x, int y, Direction dire) {
-		super(ImageUtil.imgMob.snail.move.l, x, y, dire, 500, 5);
+		super(ImageUtil.imgMob.snail.move.l, x, y, dire, 500, 5, 4);
 	}
 
 	public MobSnail() {
@@ -30,18 +28,6 @@ public class MobSnail extends MobBase {
 		hit(MapleStoryClient.hero);
 		super.draw(g);
 		Hiting();
-	}
-
-	@Override
-	public boolean hit(Hero hero) {
-
-		if (this.getRectangle().intersects(hero.getRectangle())) {
-			hero.HP -= attack;
-		}
-		if (hero.HP <= 0) {
-			hero.die();
-		}
-		return false;
 	}
 
 	@Override
@@ -71,10 +57,7 @@ public class MobSnail extends MobBase {
 				break;
 			case WALK:
 				if (!isOnGround()) {
-					if (Jump.jump_up) {
-						fallInit();
-					}
-					fall();
+					fallCheck();
 				} else {
 					img = ImageUtil.imgMob.snail.move.l;
 					x -= speed;
@@ -92,10 +75,7 @@ public class MobSnail extends MobBase {
 				break;
 			case WALK:
 				if (!isOnGround()) {
-					if (Jump.jump_up) {
-						fallInit();
-					}
-					fall();
+					fallCheck();
 				} else {
 					img = ImageUtil.imgMob.snail.move.r;
 					x += speed;

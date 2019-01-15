@@ -19,7 +19,7 @@ import com.neuedu.maplestory.util.ImageUtil;
  */
 public class Hero extends NPC implements Bloodable {
 
-	public boolean shoot, skill, hit, up, down;
+	public boolean shoot, skill, hit;
 	public boolean left, right;
 	public Action action;
 	private int count = 0;
@@ -41,7 +41,6 @@ public class Hero extends NPC implements Bloodable {
 			this.width = img[0].getWidth(null);
 			this.height = img[0].getHeight(null);
 		} catch (Exception e) {
-			// TODO: handle exception
 			e.printStackTrace();
 		}
 
@@ -74,7 +73,14 @@ public class Hero extends NPC implements Bloodable {
 
 		if (jump) {
 			this.action = Action.JUMP;
-			jump();
+			if (!up || !isOnRope()) {
+				jump();
+			} else {
+				this.jump = false;
+				Jump.v0 = Jump.v_init;
+				Jump.jump_up = true;
+				Jump.vt = 0;
+			}
 		}
 
 		if (hit) {
@@ -102,11 +108,14 @@ public class Hero extends NPC implements Bloodable {
 			switch (this.action) {
 			case WALK:
 				if (!isOnGround()) {
-					jump = true;
-				} else {
-					x -= speed;
-					img = ImageUtil.imgHero.walk.l;
+					if (Jump.jump_up) {
+						fallInit();
+					}
+					fall();
 				}
+				x -= speed;
+				img = ImageUtil.imgHero.walk.l;
+
 				break;
 			case SHOOT:
 				img = ImageUtil.imgHero.shoot.l;
@@ -143,11 +152,15 @@ public class Hero extends NPC implements Bloodable {
 			switch (this.action) {
 			case WALK:
 				if (!isOnGround()) {
-					jump = true;
-				} else {
-					x += speed;
-					img = ImageUtil.imgHero.walk.r;
+
+					if (Jump.jump_up) {
+						fallInit();
+					}
+					fall();
 				}
+				x += speed;
+				img = ImageUtil.imgHero.walk.r;
+
 				break;
 			case SHOOT:
 				img = ImageUtil.imgHero.shoot.r;

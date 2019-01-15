@@ -1,6 +1,7 @@
 package com.neuedu.maplestory.entity;
 
 import java.awt.Graphics;
+import java.awt.Rectangle;
 
 import com.neuedu.maplestory.util.ImageUtil;
 
@@ -24,5 +25,12 @@ public class Rope extends Shape {
 			g.drawImage(img[1], x + 3, y + img[0].getHeight(null) + img[1].getHeight(null) * i, null);
 		}
 		g.drawImage(img[2], x + 1, y + img[0].getHeight(null) + img[1].getHeight(null) * length, null);
+	}
+
+	@Override
+	public Rectangle getRectangle() {
+
+		return new Rectangle(x, y, img[0].getWidth(null),
+				img[0].getHeight(null) + length * img[1].getHeight(null) + img[2].getHeight(null));
 	}
 }

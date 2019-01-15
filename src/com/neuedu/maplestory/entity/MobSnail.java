@@ -71,10 +71,14 @@ public class MobSnail extends MobBase {
 				break;
 			case WALK:
 				if (!isOnGround()) {
-					jump = true;
+					if (Jump.jump_up) {
+						fallInit();
+					}
+					fall();
 				} else {
-				img = ImageUtil.imgMob.snail.move.l;
-				x -= speed;}
+					img = ImageUtil.imgMob.snail.move.l;
+					x -= speed;
+				}
 				break;
 			}
 			break;
@@ -88,10 +92,14 @@ public class MobSnail extends MobBase {
 				break;
 			case WALK:
 				if (!isOnGround()) {
-					jump = true;
+					if (Jump.jump_up) {
+						fallInit();
+					}
+					fall();
 				} else {
-				img = ImageUtil.imgMob.snail.move.r;
-				x += speed;}
+					img = ImageUtil.imgMob.snail.move.r;
+					x += speed;
+				}
 				break;
 			}
 			break;

@@ -13,7 +13,7 @@ public class NPC extends Shape {
 	public int MAX_HP;
 	public int speed;
 	public Direction dire;
-	public boolean die, jump;
+	public boolean die, jump, up, down;
 	public JP Jump = new JP();
 
 	public NPC(Image[] img, int x, int y, int MAX_HP, int speed, Direction dire) {
@@ -24,6 +24,8 @@ public class NPC extends Shape {
 		this.dire = dire;
 		this.die = false;
 		this.jump = true;
+		this.up = false;
+		this.down = false;
 	}
 
 	/**
@@ -52,26 +54,40 @@ public class NPC extends Shape {
 			Jump.v0 = Jump.vt;
 			y -= Jump.delta_height;
 			if (Jump.vt <= 0) {
-				Jump.jump_up = false;
-				Jump.vt = 0;
-				Jump.v0 = 0;
+				fallInit();
 			}
 		} else {
-			Jump.vt = Jump.v0 + Jump.g * Jump.t;
-			Jump.delta_height = Jump.v0 * Jump.t;
-			Jump.v0 = Jump.vt;
-			y += Jump.delta_height;
-			if (isOnGround()) {
-				onTheGround();
-				this.jump = false;
-				Jump.v0 = Jump.v_init;
-				Jump.jump_up = true;
-				Jump.vt = 0;
-			}
+			fall();
 		}
 	}
 
-	
+	public void jumpInit() {
+
+		this.jump = false;
+		Jump.v0 = Jump.v_init;
+		Jump.jump_up = true;
+		Jump.vt = 0;
+	}
+
+	public void fallInit() {
+
+		Jump.jump_up = false;
+		Jump.vt = 0;
+		Jump.v0 = 0;
+	}
+
+	public void fall() {
+		Jump.vt = Jump.v0 + Jump.g * Jump.t;
+		Jump.delta_height = Jump.v0 * Jump.t;
+		Jump.v0 = Jump.vt;
+		y += Jump.delta_height;
+		if (isOnGround()) {
+			onTheGround();
+			jumpInit();
+		}
+
+	}
+
 	@Override
 	void draw(Graphics g) {
 

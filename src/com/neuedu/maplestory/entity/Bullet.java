@@ -57,7 +57,7 @@ public class Bullet {
 
 	private void outOfBounds() {
 
-		if (x < 0 || x > MapleStoryClient.backGround.weight) {
+		if (x < 0 || x > MapleStoryClient.backGround.width) {
 			die();
 		}
 		if (y < 0 || y > MapleStoryClient.backGround.height) {
@@ -115,9 +115,10 @@ public class Bullet {
 
 	public void hitMods(List<MobBase> mobs) {
 		for (MobBase mob : mobs) {
+			int hurt_val = (int) Math.sqrt(this.width * this.height);
 			if (this.hit(mob)) {
 				this.die();
-				mob.HP -= Math.sqrt(this.width * this.height);
+				mob.HP -= hurt_val;
 				if (mob.HP <= 0) {
 					mob.die();
 				} else {

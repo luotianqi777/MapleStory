@@ -2,7 +2,6 @@ package com.neuedu.maplestory.entity;
 
 import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.Rectangle;
 
 import com.neuedu.maplestory.client.MapleStoryClient;
 
@@ -24,6 +23,7 @@ public abstract class MobBase extends NPC implements Bloodable {
 		this(null, 0, 0, Direction.LEFT, 100, 0);
 	}
 
+	@Override
 	public void draw(Graphics g) {
 		if (img.length <= 0) {
 			return;
@@ -38,6 +38,9 @@ public abstract class MobBase extends NPC implements Bloodable {
 
 	void move() {
 		updataAction();
+		if (jump) {
+			jump();
+		}
 	}
 
 	abstract boolean hit(Hero hero);
@@ -50,20 +53,13 @@ public abstract class MobBase extends NPC implements Bloodable {
 		return this.die;
 	}
 
-	/**
-	 * get Rectangle
-	 */
-	public Rectangle getRectangle() {
-		return new Rectangle(x, y, width, height);
-	}
-
 	void outOfBounds() {
 		if (x <= MapleStoryClient.getBackX()) {
 			x = MapleStoryClient.getBackX();
 			this.dire = Direction.RIGHT;
 		}
-		if (x > MapleStoryClient.backGround.weight - this.width) {
-			x = MapleStoryClient.backGround.weight - this.width;
+		if (x > MapleStoryClient.backGround.width - this.width) {
+			x = MapleStoryClient.backGround.width - this.width;
 			this.dire = Direction.LEFT;
 		}
 	}

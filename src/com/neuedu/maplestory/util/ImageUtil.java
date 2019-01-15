@@ -12,7 +12,17 @@ import com.neuedu.maplestory.util.GameUtil;
 
 public class ImageUtil {
 
-	public static Image imgBackground = GameUtil.getImage("com/neuedu/maplestory/img/background/BackGround.png");
+	public static Image[] imgGround = new Image[1];
+
+	static {
+		imgGround[0] = GameUtil.getImage("com/neuedu/maplestory/img/ground/ground.png");
+	}
+
+	public static Image[] imgBackground = new Image[1];
+
+	static {
+		imgBackground[0] = GameUtil.getImage("com/neuedu/maplestory/img/background/BackGround.png");
+	}
 
 	public static class imgHero {
 		public static class walk {
@@ -159,7 +169,6 @@ public class ImageUtil {
 
 			}
 
-
 			public static class hit {
 
 				public static final int size = 3;
@@ -181,7 +190,15 @@ public class ImageUtil {
 				}
 
 			}
-			
+
+		}
+	}
+
+	public static Image[] rope = new Image[3];
+
+	static {
+		for (int i = 0; i < 3; i++) {
+			rope[i] = GameUtil.getImage("com/neuedu/maplestory/img/rope/rope" + i + ".png");
 		}
 	}
 

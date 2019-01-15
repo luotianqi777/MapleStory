@@ -2,7 +2,6 @@ package com.neuedu.maplestory.entity;
 
 import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
 import java.util.LinkedList;
 import java.util.List;
@@ -20,22 +19,10 @@ import com.neuedu.maplestory.util.ImageUtil;
  */
 public class Hero extends NPC implements Bloodable {
 
-	public boolean left, right, shoot, jump, skill, hit;
+	public boolean shoot, skill, hit, up, down;
+	public boolean left, right;
 	public Action action;
 	private int count = 0;
-
-	/**
-	 * jump_Args
-	 */
-	static public class Jump {
-		public static double v0 = 40;
-		public static double vt = 0;
-		public static final double g = Constant.G;
-		public static double t = 0.5;
-		public static double delta_height = 0;
-		public static boolean jump_up = true;
-		public static int sy = 0;
-	}
 
 	/**
 	 * shoot_Args
@@ -43,15 +30,13 @@ public class Hero extends NPC implements Bloodable {
 	private List<Bullet> bullets = new LinkedList<>();
 
 	public Hero(Image[] img, int x, int y) {
-		super(img, x, y, 100, Constant.HERO_SPEED, Direction.RIGHT);
+		super(img, x, y, 200, Constant.HERO_SPEED, Direction.RIGHT);
 		this.left = false;
 		this.right = false;
 		this.shoot = false;
-		this.jump = false;
 		this.skill = false;
 		this.hit = false;
 		this.action = Action.STAND;
-
 		try {
 			this.width = img[0].getWidth(null);
 			this.height = img[0].getHeight(null);
@@ -63,15 +48,11 @@ public class Hero extends NPC implements Bloodable {
 	}
 
 	public Hero() {
-		this(ImageUtil.imgHero.stand.l, 800, 0);
-		this.y = Constant.GAME_HEIGHT - this.height - 25;
+		this(ImageUtil.imgHero.stand.l, 10, 0);
+		this.y = Constant.GAME_HEIGHT - this.height - 50;
 	}
 
-	/**
-	 * move
-	 */
-	public void move() {
-
+	private void updataAction() {
 		if (left) {
 			this.dire = Direction.LEFT;
 			this.action = Action.WALK;
@@ -100,12 +81,32 @@ public class Hero extends NPC implements Bloodable {
 			this.action = Action.HIT;
 		}
 
+		if (up && isOnRope()) {
+			this.action = Action.UP;
+		}
+
+		if (down && isOnRope()) {
+			this.action = Action.DOWN;
+		}
+	}
+
+	/**
+	 * move
+	 */
+	public void move() {
+
+		updataAction();
+
 		switch (this.dire) {
 		case LEFT:
 			switch (this.action) {
 			case WALK:
-				x -= speed;
-				img = ImageUtil.imgHero.walk.l;
+				if (!isOnGround()) {
+					jump = true;
+				} else {
+					x -= speed;
+					img = ImageUtil.imgHero.walk.l;
+				}
 				break;
 			case SHOOT:
 				img = ImageUtil.imgHero.shoot.l;
@@ -130,13 +131,23 @@ public class Hero extends NPC implements Bloodable {
 				break;
 			case HIT:
 				break;
+			case UP:
+				y -= speed / 2;
+				break;
+			case DOWN:
+				y += speed / 2;
+				break;
 			}
 			break;
 		case RIGHT:
 			switch (this.action) {
 			case WALK:
-				x += speed;
-				img = ImageUtil.imgHero.walk.r;
+				if (!isOnGround()) {
+					jump = true;
+				} else {
+					x += speed;
+					img = ImageUtil.imgHero.walk.r;
+				}
 				break;
 			case SHOOT:
 				img = ImageUtil.imgHero.shoot.r;
@@ -160,6 +171,12 @@ public class Hero extends NPC implements Bloodable {
 				img = ImageUtil.imgHero.skill.r;
 				break;
 			case HIT:
+				break;
+			case UP:
+				y -= speed / 2;
+				break;
+			case DOWN:
+				y += speed / 2;
 				break;
 			}
 			break;
@@ -188,34 +205,6 @@ public class Hero extends NPC implements Bloodable {
 		bullets.removeIf((e) -> {
 			return e.isDie();
 		});
-	}
-
-	/**
-	 * jump Method
-	 */
-	public void jump() {
-		if (Jump.jump_up) {
-			Jump.vt = Jump.v0 - Jump.g * Jump.t;
-			Jump.delta_height = Jump.v0 * Jump.t;
-			Jump.v0 = Jump.vt;
-			y -= Jump.delta_height;
-			if (Jump.vt <= 0) {
-				Jump.jump_up = false;
-				Jump.vt = 0;
-				Jump.v0 = 0;
-			}
-		} else {
-			Jump.vt = Jump.v0 + Jump.g * Jump.t;
-			Jump.delta_height = Jump.v0 * Jump.t;
-			Jump.v0 = Jump.vt;
-			y += Jump.delta_height;
-			if (y >= Jump.sy) {
-				y = Jump.sy;
-				this.jump = false;
-				Jump.v0 = 40;
-				Jump.vt = 0;
-			}
-		}
 	}
 
 	/**
@@ -260,24 +249,33 @@ public class Hero extends NPC implements Bloodable {
 		}
 		for (Bullet bullet : bullets) {
 			bullet.grow();
-			bullet.addAngle(new Random().nextDouble() * Math.PI * 2);
+			bullet.addAngle(Math.PI);
 		}
 	}
 
 	/**
 	 * die
 	 */
-	void die(){
+	void die() {
 		this.die = true;
 		MapleStoryClient.hero = new Hero();
 	}
-	
+
+	@Override
+	void onTheGround() {
+		// TODO Auto-generated method stub
+		super.onTheGround();
+		this.action = Action.WALK;
+		jump = false;
+	}
+
 	/**
 	 * draw
 	 * 
 	 * @param g
 	 *            g is {@link Graphics}
 	 */
+	@Override
 	public void draw(Graphics g) {
 
 		move();
@@ -303,13 +301,6 @@ public class Hero extends NPC implements Bloodable {
 	}
 
 	/**
-	 * get Rectangle
-	 */
-	public Rectangle getRectangle() {
-		return new Rectangle(x, y, width, height);
-	}
-
-	/**
 	 * key pressed
 	 * 
 	 * @param e
@@ -328,8 +319,6 @@ public class Hero extends NPC implements Bloodable {
 			break;
 		case KeyEvent.VK_K:
 			if (!jump) {
-				Jump.sy = y;
-				Jump.jump_up = true;
 				jump = true;
 			}
 			break;
@@ -341,6 +330,12 @@ public class Hero extends NPC implements Bloodable {
 			break;
 		case KeyEvent.VK_G:
 			shoot = !shoot;
+			break;
+		case KeyEvent.VK_W:
+			up = true;
+			break;
+		case KeyEvent.VK_S:
+			down = true;
 			break;
 		default:
 			break;
@@ -368,6 +363,14 @@ public class Hero extends NPC implements Bloodable {
 			break;
 		case KeyEvent.VK_L:
 			skill = false;
+			break;
+		case KeyEvent.VK_W:
+			up = false;
+			break;
+		case KeyEvent.VK_S:
+			down = false;
+			break;
+		default:
 			break;
 		}
 	}

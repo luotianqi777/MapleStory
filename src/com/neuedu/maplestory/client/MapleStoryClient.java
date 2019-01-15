@@ -5,13 +5,16 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 import com.neuedu.maplestory.constant.Constant;
 import com.neuedu.maplestory.entity.Background;
 import com.neuedu.maplestory.entity.Direction;
+import com.neuedu.maplestory.entity.Ground;
 import com.neuedu.maplestory.entity.Hero;
 import com.neuedu.maplestory.entity.MobBase;
 import com.neuedu.maplestory.entity.MobSnail;
+import com.neuedu.maplestory.entity.Rope;
 import com.neuedu.maplestory.util.FrameUtil;
 
 /**
@@ -23,8 +26,8 @@ import com.neuedu.maplestory.util.FrameUtil;
 @SuppressWarnings("serial")
 public class MapleStoryClient extends FrameUtil {
 
-	static public Hero hero = new Hero();
 	static public Background backGround = new Background();
+	static public Hero hero = new Hero();
 	static public List<MobBase> mobs = new LinkedList<>();
 	private final MobBase snail = new MobSnail();
 
@@ -53,9 +56,25 @@ public class MapleStoryClient extends FrameUtil {
 	private void addMobs() {
 		// add mobs
 		for (int i = 0; i < Constant.MOB_NUM; i++) {
-			mobs.add(new MobSnail((backGround.weight + backGround.getX()) - i * backGround.weight / Constant.MOB_NUM,
-					((Hero.Jump.sy == 0) ? hero.y : Hero.Jump.sy) + hero.height - snail.height, Direction.LEFT));
+			mobs.add(new MobSnail((backGround.width + backGround.getX()) - i * backGround.width / Constant.MOB_NUM,
+					hero.y + hero.height - snail.height,
+					(new Random().nextInt(2) == 0 ? Direction.LEFT : Direction.RIGHT)));
 		}
+	}
+
+	void createBackground() {
+
+		backGround.addRope(new Rope(200, 300, 10));
+		backGround.addRope(new Rope(250, 300, 15));
+		backGround.addRope(new Rope(300, 300, 20));
+		backGround.addRope(new Rope(350, 300, 15));
+
+		for (int i = 0;i < 9; i++) {
+			backGround.addGround(new Ground(i * Ground.IMAGE.getWidth(null) / 2,
+					Constant.GAME_HEIGHT - Ground.IMAGE.getHeight(null)));
+		}
+		backGround.grounds.add(new Ground(100, 700));
+
 	}
 
 	@Override
@@ -63,6 +82,7 @@ public class MapleStoryClient extends FrameUtil {
 
 		super.loadFrame();
 
+		createBackground();
 		// add key listener
 		this.addKeyListener(new KeyAdapter() {
 			@Override

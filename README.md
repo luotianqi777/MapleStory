@@ -1,2 +1,2 @@
 # MapleStory
-# Thanks for NeueduSoft
+# Thanks for NeuSoft

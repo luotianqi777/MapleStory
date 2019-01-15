@@ -79,7 +79,7 @@ public class ImageUtil {
 		}
 		
 		static public class skill{
-			public static final int size = 3;
+			public static final int size = 6;
 
 			public static Image[] r = new Image[size];
 

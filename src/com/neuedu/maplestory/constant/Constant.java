@@ -12,6 +12,6 @@ public class Constant {
 	public static final double G = 9.8;
 	public static final int HERO_SPEED = 15;
 	public static final int BULLET_SPEED = 30;
-	public static final int GROW_SPEED = 1;
-
+	public static final int GROW_SPEED = 0;
+	public static final int SPLIT_P = 100;
 }

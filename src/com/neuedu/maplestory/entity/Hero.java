@@ -3,8 +3,10 @@ package com.neuedu.maplestory.entity;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.KeyEvent;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 import com.neuedu.maplestory.client.MapleStoryClient;
 import com.neuedu.maplestory.constant.Constant;
@@ -222,15 +224,27 @@ public class Hero {
 		switch (this.dire) {
 		case left:
 			for (int i = 0; i < 3; i++) {
-				bullets.add(new Bullet(this.x, this.y, -Math.PI + Math.PI / 10 * i));
+				bullets.add(new Bullet(this.x, this.y, -Math.PI + Math.PI / 10 * (i - 1)));
 			}
 			break;
 		case right:
 			for (int i = 0; i < 3; i++) {
-				bullets.add(new Bullet(this.x + this.width * 2, this.y, -Math.PI / 10 * i));
+				bullets.add(new Bullet(this.x + this.width * 2, this.y, -Math.PI / 10 * (i - 1)));
 			}
 			break;
 		}
+	}
+
+	void shootSplit() {
+//		List<Bullet> temp = new LinkedList<>();
+		for (Bullet bullet : bullets) {
+			bullet.addAngle(Math.PI);
+		}
+//		temp.addAll(bullets);
+//		for (Bullet bullet : temp) {
+//			bullet.addAngle(Math.PI);
+//		}
+//		bullets.addAll(temp);
 	}
 
 	/**
@@ -246,9 +260,12 @@ public class Hero {
 	 * skill
 	 */
 	void skill() {
-		final int counts = 10;
+		final int counts = 18;
 		for (int i = 0; i <= counts; i++) {
-			bullets.add(new Bullet(ImageUtil.imgBullet.skill, this.x, this.y, -Math.PI / counts * i, 20));
+			bullets.add(new Bullet(ImageUtil.imgBullet.skill, this.x, this.y, -Math.PI * 2 / counts * i, 20));
+		}
+		if (new Random().nextInt(100) < Constant.SPLIT_P) {
+			shootSplit();
 		}
 	}
 
@@ -268,8 +285,14 @@ public class Hero {
 		}
 
 		count %= img.length;
-		g.drawImage(img[count], x - (img[count].getWidth(null) - this.width),
-				y - (img[count].getHeight(null) - this.height), null);
+		switch (this.dire) {
+		case left:
+			g.drawImage(img[count], x - (img[count].getWidth(null) - this.width),
+					y - (img[count].getHeight(null) - this.height), null);
+			break;
+		case right:
+			g.drawImage(img[count], x, y - (img[count].getHeight(null) - this.height), null);
+		}
 		count++;
 
 	}

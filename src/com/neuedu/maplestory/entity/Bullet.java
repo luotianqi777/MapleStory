@@ -34,6 +34,18 @@ public class Bullet {
 	public Bullet() {
 		this(0, 0, 0);
 	}
+	
+	public Bullet(Bullet bullet){
+		this();
+		this.img = bullet.img;
+		this.x = bullet.x;
+		this.y = bullet.y;
+		this.width = bullet.width;
+		this.height = bullet.height;
+		this.angle = bullet.angle;
+		this.speed = bullet.speed;
+		this.die = bullet.die;
+	}
 
 	public void move() {
 		grow();
@@ -67,8 +79,12 @@ public class Bullet {
 		this.width += growSpeed;
 		this.height += growSpeed;
 	}
-
+	
 	public boolean Die() {
 		return die;
+	}
+	
+	public void addAngle(double angle){
+		this.angle += angle;
 	}
 }

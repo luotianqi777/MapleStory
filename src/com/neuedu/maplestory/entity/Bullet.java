@@ -2,8 +2,10 @@ package com.neuedu.maplestory.entity;
 
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.Rectangle;
+import java.util.List;
 
-
+import com.neuedu.maplestory.client.MapleStoryClient;
 import com.neuedu.maplestory.constant.Constant;
 import com.neuedu.maplestory.util.ImageUtil;
 
@@ -34,8 +36,8 @@ public class Bullet {
 	public Bullet() {
 		this(0, 0, 0);
 	}
-	
-	public Bullet(Bullet bullet){
+
+	public Bullet(Bullet bullet) {
 		this();
 		this.img = bullet.img;
 		this.x = bullet.x;
@@ -50,11 +52,16 @@ public class Bullet {
 	public void move() {
 		x += speed * Math.cos(angle);
 		y += speed * Math.sin(angle);
-		if (x < 0 || x > Constant.GAME_WIDTH) {
-			this.die = true;
+		outOfBounds();
+	}
+
+	private void outOfBounds() {
+
+		if (x < 0 || x > MapleStoryClient.backGround.weight) {
+			die();
 		}
-		if (y < 0 || y > Constant.GAME_HEIGHT) {
-			this.die = true;
+		if (y < 0 || y > MapleStoryClient.backGround.height) {
+			die();
 		}
 	}
 
@@ -70,7 +77,7 @@ public class Bullet {
 	 */
 	public void draw(Graphics g) {
 		count %= ImageUtil.imgBullet.size;
-		g.drawImage(img[count], x, y, this.width, this.height, null);
+		g.drawImage(img[count], x + MapleStoryClient.getBackX(), y, this.width, this.height, null);
 		count++;
 	}
 
@@ -78,12 +85,52 @@ public class Bullet {
 		this.width += growSpeed;
 		this.height += growSpeed;
 	}
-	
-	public boolean Die() {
+
+	public void die() {
+		this.die = true;
+	}
+
+	/**
+	 * 
+	 * @return {@link Boolean}
+	 */
+	public boolean isDie() {
 		return die;
 	}
-	
-	public void addAngle(double angle){
+
+	public void addAngle(double angle) {
 		this.angle += angle;
+	}
+
+	public boolean hit(MobBase mob) {
+		if (mob.isDie() || this.die) {
+			return false;
+		}
+		if (this.getRectangle().intersects(mob.getRectangle())) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public void hitMods(List<MobBase> mobs) {
+		for (MobBase mob : mobs) {
+			if (this.hit(mob)) {
+				this.die();
+				mob.HP -= Math.sqrt(this.width * this.height);
+				if (mob.HP <= 0) {
+					mob.die();
+				} else {
+					mob.hit = true;
+				}
+			}
+		}
+	}
+
+	/**
+	 * get Rectangle
+	 */
+	public Rectangle getRectangle() {
+		return new Rectangle(x, y, width, height);
 	}
 }

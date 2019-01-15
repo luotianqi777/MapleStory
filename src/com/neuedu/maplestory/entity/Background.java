@@ -9,12 +9,16 @@ import com.neuedu.maplestory.util.ImageUtil;
 public class Background {
 
 	public Image img;
-	public int x;
-	public int y;
+	protected int x;
+	protected int y;
 	public int height;
 	public int weight;
 	private int speed;
 
+	public int getX(){
+		return x;
+	}
+	
 	public Background(Image img, int x, int y) {
 		this.img = img;
 		this.x = x;
@@ -35,13 +39,13 @@ public class Background {
 
 	public void move(Direction direction) {
 		switch (direction) {
-		case left:
+		case LEFT:
 			this.x -= speed;
 			if (x < Constant.GAME_WIDTH - this.weight) {
 				x = Constant.GAME_WIDTH - this.weight;
 			}
 			break;
-		case right:
+		case RIGHT:
 			this.x += speed;
 			if (x > 0) {
 				x = 0;

@@ -77,8 +77,8 @@ public class ImageUtil {
 				}
 			}
 		}
-		
-		static public class skill{
+
+		static public class skill {
 			public static final int size = 6;
 
 			public static Image[] r = new Image[size];
@@ -91,18 +91,16 @@ public class ImageUtil {
 					l[i] = GameUtil.getImage("com/neuedu/maplestory/img/hero/skill_l/skill1_" + i + ".png");
 				}
 			}
-			
+
 		}
 	}
 
-	
-	
 	public static class imgBullet {
-		
+
 		public static final int size = 1;
 
 		public static Image[] norml = new Image[size];
-		
+
 		public static Image[] skill = new Image[size];
 
 		static {
@@ -112,6 +110,79 @@ public class ImageUtil {
 			}
 		}
 
+	}
+
+	public static class imgMob {
+		public static class snail {
+
+			public static class die {
+
+				public static final int size = 12;
+
+				public static Image[] r = new Image[size];
+
+				public static Image[] l = new Image[size];
+
+				static {
+
+					for (int i = 0; i < size; i++) {
+						l[i] = GameUtil.getImage("com/neuedu/maplestory/img/mob/snail/die_l/" + i + ".png");
+					}
+
+					for (int i = 0; i < size; i++) {
+						r[i] = GameUtil.getImage("com/neuedu/maplestory/img/mob/snail/die_r/" + i + ".png");
+					}
+
+				}
+
+			}
+
+			public static class move {
+
+				public static final int size = 4;
+
+				public static Image[] r = new Image[size];
+
+				public static Image[] l = new Image[size];
+
+				static {
+
+					for (int i = 0; i < size; i++) {
+						l[i] = GameUtil.getImage("com/neuedu/maplestory/img/mob/snail/move_l/" + i + ".png");
+					}
+
+					for (int i = 0; i < size; i++) {
+						r[i] = GameUtil.getImage("com/neuedu/maplestory/img/mob/snail/move_r/" + i + ".png");
+					}
+
+				}
+
+			}
+
+
+			public static class hit {
+
+				public static final int size = 3;
+
+				public static Image[] r = new Image[size];
+
+				public static Image[] l = new Image[size];
+
+				static {
+
+					for (int i = 0; i < size; i++) {
+						l[i] = GameUtil.getImage("com/neuedu/maplestory/img/mob/snail/hit_l/" + i + ".png");
+					}
+
+					for (int i = 0; i < size; i++) {
+						r[i] = GameUtil.getImage("com/neuedu/maplestory/img/mob/snail/hit_r/" + i + ".png");
+					}
+
+				}
+
+			}
+			
+		}
 	}
 
 }

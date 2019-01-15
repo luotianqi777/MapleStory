@@ -2,6 +2,7 @@ package com.neuedu.maplestory.entity;
 
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
 import java.util.LinkedList;
 import java.util.List;
@@ -17,29 +18,39 @@ import com.neuedu.maplestory.util.ImageUtil;
  * @author Lain
  *
  */
-public class Hero {
-	public Image[] img;
-	public int x, y;
-	public boolean left, right, shoot, jump, skill;
-	public Direction dire;
+public class Hero extends NPC implements Bloodable {
+
+	public boolean left, right, shoot, jump, skill, hit;
 	public Action action;
-	public int width;
-	public int height;
-	public int speed;
 	private int count = 0;
 
+	/**
+	 * jump_Args
+	 */
+	static public class Jump {
+		public static double v0 = 40;
+		public static double vt = 0;
+		public static final double g = Constant.G;
+		public static double t = 0.5;
+		public static double delta_height = 0;
+		public static boolean jump_up = true;
+		public static int sy = 0;
+	}
+
+	/**
+	 * shoot_Args
+	 */
+	private List<Bullet> bullets = new LinkedList<>();
+
 	public Hero(Image[] img, int x, int y) {
-		this.img = img;
-		this.x = x;
-		this.y = y;
+		super(img, x, y, 100, Constant.HERO_SPEED, Direction.RIGHT);
 		this.left = false;
 		this.right = false;
 		this.shoot = false;
 		this.jump = false;
 		this.skill = false;
-		this.dire = Direction.right;
-		this.action = Action.stand;
-		this.speed = Constant.HERO_SPEED;
+		this.hit = false;
+		this.action = Action.STAND;
 
 		try {
 			this.width = img[0].getWidth(null);
@@ -62,39 +73,44 @@ public class Hero {
 	public void move() {
 
 		if (left) {
-			this.dire = Direction.left;
-			this.action = Action.walk;
+			this.dire = Direction.LEFT;
+			this.action = Action.WALK;
 		} else if (right) {
-			this.dire = Direction.right;
-			this.action = Action.walk;
+			this.dire = Direction.RIGHT;
+			this.action = Action.WALK;
 		} else {
-			this.action = Action.stand;
+			this.action = Action.STAND;
 		}
 
 		if (shoot) {
-			this.action = Action.shoot;
+			shoot();
+			this.action = Action.SHOOT;
 		}
 
 		if (skill) {
-			this.action = Action.skill;
+			this.action = Action.SKILL;
 		}
 
 		if (jump) {
-			this.action = Action.jump;
+			this.action = Action.JUMP;
 			jump();
 		}
 
+		if (hit) {
+			this.action = Action.HIT;
+		}
+
 		switch (this.dire) {
-		case left:
+		case LEFT:
 			switch (this.action) {
-			case walk:
+			case WALK:
 				x -= speed;
 				img = ImageUtil.imgHero.walk.l;
 				break;
-			case shoot:
+			case SHOOT:
 				img = ImageUtil.imgHero.shoot.l;
 				break;
-			case jump:
+			case JUMP:
 				if (left) {
 					x -= speed;
 				}
@@ -106,24 +122,26 @@ public class Hero {
 					img = ImageUtil.imgHero.jump.l;
 				}
 				break;
-			case stand:
+			case STAND:
 				img = ImageUtil.imgHero.stand.l;
 				break;
-			case skill:
+			case SKILL:
 				img = ImageUtil.imgHero.skill.l;
+				break;
+			case HIT:
 				break;
 			}
 			break;
-		case right:
+		case RIGHT:
 			switch (this.action) {
-			case walk:
+			case WALK:
 				x += speed;
 				img = ImageUtil.imgHero.walk.r;
 				break;
-			case shoot:
+			case SHOOT:
 				img = ImageUtil.imgHero.shoot.r;
 				break;
-			case jump:
+			case JUMP:
 				if (right) {
 					x += speed;
 				}
@@ -135,11 +153,13 @@ public class Hero {
 					img = ImageUtil.imgHero.jump.r;
 				}
 				break;
-			case stand:
+			case STAND:
 				img = ImageUtil.imgHero.stand.r;
 				break;
-			case skill:
+			case SKILL:
 				img = ImageUtil.imgHero.skill.r;
+				break;
+			case HIT:
 				break;
 			}
 			break;
@@ -155,32 +175,19 @@ public class Hero {
 		// left bound
 		if (x < 0) {
 			x = 0;
-			MapleStoryClient.backGround.move(Direction.right);
+			MapleStoryClient.backGround.move(Direction.RIGHT);
 		}
 
 		// right bound
 		if (x > Constant.GAME_WIDTH - this.width) {
 			x = Constant.GAME_WIDTH - this.width;
-			MapleStoryClient.backGround.move(Direction.left);
+			MapleStoryClient.backGround.move(Direction.LEFT);
 		}
 
 		// bullets out of bound
 		bullets.removeIf((e) -> {
-			return e.Die();
+			return e.isDie();
 		});
-	}
-
-	/**
-	 * jump_Args
-	 */
-	static class Jump {
-		public static double v0 = 40;
-		public static double vt = 0;
-		public static final double g = Constant.G;
-		public static double t = 0.5;
-		public static double delta_height = 0;
-		public static boolean jump_up = true;
-		public static int sy;
 	}
 
 	/**
@@ -212,25 +219,21 @@ public class Hero {
 	}
 
 	/**
-	 * shoot_Args
-	 */
-	private List<Bullet> bullets = new LinkedList<>();
-
-	/**
 	 * shoot Method
 	 */
 	void shoot() {
+		double abs = (new Random().nextDouble()) * Math.PI / 8;
 		switch (this.dire) {
-		case left:
+		case LEFT:
 			for (int i = 0; i < 3; i++) {
-				bullets.add(
-						new Bullet(this.x, this.y, -Math.PI + (new Random().nextDouble()) * Math.PI / 10 * (i - 1)));
+				bullets.add(new Bullet(this.x - this.width - MapleStoryClient.getBackX(), this.y,
+						-abs - Math.PI - Math.PI / 10 * (i - 1)));
 			}
 			break;
-		case right:
+		case RIGHT:
 			for (int i = 0; i < 3; i++) {
-				bullets.add(new Bullet(this.x + this.width * 2, this.y,
-						-(new Random().nextDouble()) * Math.PI / 10 * (i - 1)));
+				bullets.add(new Bullet(this.x + this.width * 2 - MapleStoryClient.getBackX(), this.y,
+						abs - Math.PI / 10 * (i - 1)));
 			}
 			break;
 		}
@@ -242,6 +245,7 @@ public class Hero {
 	void moveBullets() {
 		for (Bullet bullet : bullets) {
 			bullet.move();
+			bullet.hitMods(MapleStoryClient.mobs);
 		}
 	}
 
@@ -251,14 +255,23 @@ public class Hero {
 	void skill() {
 		final int counts = 18;
 		for (int i = 0; i <= counts; i++) {
-			bullets.add(new Bullet(ImageUtil.imgBullet.skill, this.x, this.y, -Math.PI * 2 / counts * i, 20));
+			bullets.add(new Bullet(ImageUtil.imgBullet.skill, this.x - MapleStoryClient.backGround.x, this.y,
+					-Math.PI * 2 / counts * i, 20));
 		}
 		for (Bullet bullet : bullets) {
 			bullet.grow();
-			bullet.addAngle(new Random().nextDouble() * Math.PI);
+			bullet.addAngle(new Random().nextDouble() * Math.PI * 2);
 		}
 	}
 
+	/**
+	 * die
+	 */
+	void die(){
+		this.die = true;
+		MapleStoryClient.hero = new Hero();
+	}
+	
 	/**
 	 * draw
 	 * 
@@ -274,17 +287,26 @@ public class Hero {
 			bullet.draw(g);
 		}
 
+		drawBloodBar(g, this, false);
+
 		count %= img.length;
 		switch (this.dire) {
-		case left:
+		case LEFT:
 			g.drawImage(img[count], x - (img[count].getWidth(null) - this.width),
 					y - (img[count].getHeight(null) - this.height), null);
 			break;
-		case right:
+		case RIGHT:
 			g.drawImage(img[count], x, y - (img[count].getHeight(null) - this.height), null);
 		}
 		count++;
 
+	}
+
+	/**
+	 * get Rectangle
+	 */
+	public Rectangle getRectangle() {
+		return new Rectangle(x, y, width, height);
 	}
 
 	/**
@@ -302,9 +324,6 @@ public class Hero {
 			right = true;
 			break;
 		case KeyEvent.VK_J:
-			if (!shoot) {
-				shoot();
-			}
 			shoot = true;
 			break;
 		case KeyEvent.VK_K:
@@ -319,6 +338,9 @@ public class Hero {
 				skill();
 			}
 			skill = true;
+			break;
+		case KeyEvent.VK_G:
+			shoot = !shoot;
 			break;
 		default:
 			break;
@@ -349,4 +371,5 @@ public class Hero {
 			break;
 		}
 	}
+
 }

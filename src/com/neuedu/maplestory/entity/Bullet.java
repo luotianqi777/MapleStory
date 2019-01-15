@@ -48,7 +48,6 @@ public class Bullet {
 	}
 
 	public void move() {
-		grow();
 		x += speed * Math.cos(angle);
 		y += speed * Math.sin(angle);
 		if (x < 0 || x > Constant.GAME_WIDTH) {

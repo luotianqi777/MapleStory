@@ -96,18 +96,18 @@ public class MapleStoryClient extends FrameUtil {
 
 	void createBackground() {
 
-		backGround.addRope(new Rope(400, 400, 10));
-		backGround.addRope(new Rope(1300, 550, 4));
-		backGround.addRope(new Rope(1000, 220, 5));
+		backGround.addRope(new Rope(400, 300, 10));
+		backGround.addRope(new Rope(1300, 450, 4));
+		backGround.addRope(new Rope(1000, 120, 5));
 
 		for (int i = 0; i < 9; i++) {
 			backGround.addGround(new Ground(i * Ground.IMAGE.getWidth(null) / 2,
 					Constant.GAME_HEIGHT - Ground.IMAGE.getHeight(null)));
 		}
-		backGround.grounds.add(new Ground(0, 400));
-		backGround.grounds.add(new Ground(600, 220));
-		backGround.grounds.add(new Ground(500, 700));
-		backGround.grounds.add(new Ground(1200, 550));
+		backGround.grounds.add(new Ground(0, 300));
+		backGround.grounds.add(new Ground(600, 120));
+		backGround.grounds.add(new Ground(500, 600));
+		backGround.grounds.add(new Ground(1200, 450));
 
 	}
 

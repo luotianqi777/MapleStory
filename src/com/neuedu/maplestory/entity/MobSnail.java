@@ -2,7 +2,6 @@ package com.neuedu.maplestory.entity;
 
 import java.awt.Graphics;
 
-import com.neuedu.maplestory.client.MapleStoryClient;
 import com.neuedu.maplestory.util.ImageUtil;
 import com.neuedu.maplestory.util.ItemUtil;
 
@@ -87,7 +86,6 @@ public class MobSnail extends MobBase {
 			break;
 		}
 		outOfBounds();
-		hit(MapleStoryClient.hero);
 	}
 
 }

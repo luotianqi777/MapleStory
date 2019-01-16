@@ -44,6 +44,7 @@ public abstract class MobBase extends NPC implements Bloodable, Dropable {
 		if (jump) {
 			jump();
 		}
+		hit(MapleStoryClient.hero);
 	}
 
 	public void Hiting() {
@@ -53,7 +54,7 @@ public abstract class MobBase extends NPC implements Bloodable, Dropable {
 		}
 	}
 
-	public boolean hit(Hero hero) {
+	public void hit(Hero hero) {
 
 		if (this.getRectangle().intersects(hero.getRectangle())) {
 			int hurt_val = attack + new Random().nextInt(5) - 2;
@@ -63,7 +64,6 @@ public abstract class MobBase extends NPC implements Bloodable, Dropable {
 		if (hero.HP <= 0) {
 			hero.die();
 		}
-		return false;
 	}
 
 	@Override

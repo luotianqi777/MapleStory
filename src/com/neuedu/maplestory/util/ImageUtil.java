@@ -139,14 +139,12 @@ public class ImageUtil {
 				skill[i] = GameUtil.getImage("com/neuedu/maplestory/img/bullet/bullet1_" + i + ".png");
 			}
 		}
-		
-		
 
 	}
 
 	public static class imgMob {
 
-		public static class boos {
+		public static class boss {
 
 			public static class die {
 

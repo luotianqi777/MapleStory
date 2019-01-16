@@ -1,7 +1,10 @@
 package com.neuedu.maplestory.util;
 
+import java.awt.Color;
+
 import com.neuedu.maplestory.client.MapleStoryClient;
 import com.neuedu.maplestory.entity.BulletType;
+import com.neuedu.maplestory.entity.HeadInfo;
 import com.neuedu.maplestory.entity.Item;
 
 public class ItemUtil {
@@ -15,6 +18,8 @@ public class ItemUtil {
 		@Override
 		public void work() {
 			MapleStoryClient.hero.HP += 50;
+			MapleStoryClient.hero.headInfos
+					.add(new HeadInfo("HP+50", MapleStoryClient.hero.x, MapleStoryClient.hero.y, Color.GREEN));
 		}
 
 		@Override
@@ -33,6 +38,8 @@ public class ItemUtil {
 		@Override
 		public void work() {
 			MapleStoryClient.hero.MP += 20;
+			MapleStoryClient.hero.headInfos
+					.add(new HeadInfo("MP+20", MapleStoryClient.hero.x, MapleStoryClient.hero.y, Color.BLUE));
 		}
 
 		@Override
@@ -51,6 +58,8 @@ public class ItemUtil {
 		@Override
 		public void work() {
 			MapleStoryClient.hero.speed += 1;
+			MapleStoryClient.hero.headInfos
+					.add(new HeadInfo("速度增加", MapleStoryClient.hero.x, MapleStoryClient.hero.y, Color.GRAY));
 		}
 
 		@Override
@@ -69,6 +78,8 @@ public class ItemUtil {
 		@Override
 		public void work() {
 			MapleStoryClient.hero.bulletType = BulletType.SIN;
+			MapleStoryClient.hero.headInfos
+					.add(new HeadInfo("特殊弹道", MapleStoryClient.hero.x, MapleStoryClient.hero.y, Color.CYAN));
 		}
 
 		@Override

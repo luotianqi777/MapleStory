@@ -1,5 +1,6 @@
 package com.neuedu.maplestory.entity;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.util.LinkedList;
@@ -17,7 +18,7 @@ public class NPC extends Shape implements Bloodable {
 	public Direction dire;
 	protected boolean die, jump, up, down, hit;
 	public JP Jump = new JP();
-	public List<Hurt> hurts = new LinkedList<>();
+	public List<HeadInfo> headInfos = new LinkedList<>();
 
 	public NPC(Image[] img, int x, int y, int MAX_HP, int MAX_MP, int speed, Direction dire) {
 		super(img, x, y);
@@ -100,7 +101,11 @@ public class NPC extends Shape implements Bloodable {
 		fall();
 	}
 
-	private int fix = Ground.IMAGE.getHeight(null)/2 + this.height/2;
+	private int fix = Ground.IMAGE.getHeight(null) / 2 + this.height;
+
+	protected void setFix(int fix) {
+		this.fix = fix;
+	}
 
 	private Ground getGround() {
 		for (Ground ground : MapleStoryClient.backGround.grounds) {
@@ -147,24 +152,26 @@ public class NPC extends Shape implements Bloodable {
 
 	public void beHited(int hurt_val) {
 		this.hit = true;
-		this.hurts.add(new Hurt(hurt_val, this.getTrueX() + this.width / 3, this.y - this.height));
+		this.headInfos.add(new HeadInfo(Integer.toString(hurt_val), this.getTrueX() + this.width / 3,
+				this.y, Color.RED));
 	}
 
-	public void drawHurts(Graphics g) {
+	public void drawHeadInfos(Graphics g) {
 
-		hurts.removeIf((e) -> {
+		headInfos.removeIf((e) -> {
 			return e.isDie();
 		});
 
-		for (Hurt hurt : hurts) {
-			hurt.draw(g);
+		for (HeadInfo HeadInfo : headInfos) {
+			HeadInfo.draw(g);
 		}
+
 	}
 
 	@Override
 	public void draw(Graphics g) {
 
-		drawHurts(g);
+		drawHeadInfos(g);
 		super.draw(g);
 
 	}

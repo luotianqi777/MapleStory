@@ -4,15 +4,17 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 
-public class Hurt {
-	int val;
+public class HeadInfo {
+	String info;
 	int x, y;
 	Font font;
+	private Color color;
 
-	Hurt(int val, int x, int y) {
-		this.val = val;
+	public HeadInfo(String info, int x, int y, Color color) {
+		this.info = info;
 		this.x = x;
 		this.y = y;
+		this.color = color;
 		font = new Font("Î¢ÈíÑÅºÚ", Font.PLAIN, 20);
 	}
 
@@ -22,11 +24,12 @@ public class Hurt {
 
 		Color c = g.getColor();
 		Font f = g.getFont();
-		g.setColor(Color.RED);
+		g.setColor(color);
 		g.setFont(font);
-		g.drawString(Integer.toString(val), x, y);
+		g.drawString(info, x, y - 30);
 		g.setColor(c);
 		g.setFont(f);
+
 	}
 
 	public void move() {

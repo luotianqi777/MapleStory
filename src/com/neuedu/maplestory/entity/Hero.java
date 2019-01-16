@@ -48,6 +48,7 @@ public class Hero extends NPC implements Bloodable {
 		this.action = Action.STAND;
 		this.bulletType = BulletType.COMMEN;
 		this.kill = 0;
+		setFix(Ground.IMAGE.getHeight(null));
 		try {
 			this.width = img[0].getWidth(null);
 			this.height = img[0].getHeight(null);
@@ -123,7 +124,7 @@ public class Hero extends NPC implements Bloodable {
 			this.action = Action.GET;
 			getItems();
 		}
-		if (!isOnGround() && !Jump.jump_up) {
+		if (!isOnGround() && !Jump.jump_up && !(up || down)) {
 			fallCheck();
 		}
 	}
@@ -374,7 +375,7 @@ public class Hero extends NPC implements Bloodable {
 		g.setColor(Color.BLUE);
 		g.setFont(new Font("微软雅黑", Font.BOLD, 24));
 		g.drawString("攻击:J 跳跃:K", info_x, info_y[0]);
-		g.drawString("拾取:Z", info_x, info_y[1]);
+		g.drawString("拾取:空格", info_x, info_y[1]);
 		g.drawString("上/下绳子:W/D", info_x, info_y[2]);
 		g.drawString("开/关技能:L", info_x, info_y[3]);
 		g.drawString("开/关挂机:G", info_x, info_y[4]);
@@ -382,6 +383,24 @@ public class Hero extends NPC implements Bloodable {
 		g.setColor(c);
 		g.setFont(f);
 	}
+
+	public void drawMenu(Graphics g, Hero hero) {
+
+		Color c = g.getColor();
+		g.setColor(Color.RED);
+		g.setFont(new Font(null, Font.BOLD, 20));
+		g.drawString("HP: " + hero.HP, Constant.GAME_WIDTH - 150, 70);
+		g.setColor(Color.BLUE);
+		g.drawString("MP: " + hero.MP, Constant.GAME_WIDTH - 150, 100);
+		g.setColor(Color.GREEN);
+		g.drawString("Speed: " + hero.speed, Constant.GAME_WIDTH - 150, 130);
+		g.setColor(Color.PINK);
+		g.drawString("Kill: " + hero.kill, Constant.GAME_WIDTH - 150, 160);
+		g.setColor(Color.BLACK);
+		g.drawString("Skill: " + (hero.skill ? "ON" : "OFF"), Constant.GAME_WIDTH - 150, 190);
+		g.setColor(c);
+	}
+	
 
 	/**
 	 * draw
@@ -403,9 +422,10 @@ public class Hero extends NPC implements Bloodable {
 		drawInfo(g);
 
 		drawBloodBar(g, this, false);
+
 		drawMenu(g, this);
 
-		drawHurts(g);
+		drawHeadInfos(g);
 
 		if (img == null) {
 			return;
@@ -462,7 +482,7 @@ public class Hero extends NPC implements Bloodable {
 		case KeyEvent.VK_S:
 			down = true;
 			break;
-		case KeyEvent.VK_Z:
+		case 32: // 空格
 			get = true;
 			break;
 		default:
@@ -497,7 +517,7 @@ public class Hero extends NPC implements Bloodable {
 		case KeyEvent.VK_S:
 			down = false;
 			break;
-		case KeyEvent.VK_Z:
+		case 32: // 空格
 			get = false;
 			break;
 		default:

@@ -34,7 +34,6 @@ public class MapleStoryClient extends FrameUtil {
 	static public Hero hero = new Hero();
 	static public List<NPC> mobs = new LinkedList<>();
 	static public List<Item> items = new LinkedList<>();
-	private final NPC snail = new MobSnail();
 	private final MusicUtil bgm = new MusicUtil(MusicUtil.bgm, true);
 
 	static public int getBackX() {
@@ -45,7 +44,7 @@ public class MapleStoryClient extends FrameUtil {
 
 		// clear mobs
 		for (NPC mob : mobs) {
-			if (mob.isDie()) {
+			if (mob.isDie() && mob.HP <= 0) {
 				MobBase Mob = (MobBase) mob;
 				Mob.dropItem();
 				hero.kill++;
@@ -85,11 +84,12 @@ public class MapleStoryClient extends FrameUtil {
 
 	private void addMobs() {
 		// add BOOS
-		mobs.add(new MobBoss(Constant.GAME_WIDTH/2, Constant.GAME_HEIGHT/2, Direction.LEFT));
+		mobs.add(new MobBoss(Constant.GAME_WIDTH / 2,
+				new Random().nextInt(Constant.GAME_HEIGHT * 3 / 4 + Constant.GAME_HEIGHT / 5), Direction.LEFT));
 		// add mobs
 		for (int i = 0; i < Constant.MOB_NUM; i++) {
 			mobs.add(new MobSnail((backGround.width + backGround.getX()) - i * backGround.width / Constant.MOB_NUM,
-					hero.y + hero.height - snail.height,
+					new Random().nextInt(Constant.GAME_HEIGHT),
 					(new Random().nextInt(2) == 0 ? Direction.LEFT : Direction.RIGHT)));
 		}
 	}

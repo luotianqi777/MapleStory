@@ -1,5 +1,6 @@
 package com.neuedu.maplestory.entity;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
@@ -54,7 +55,7 @@ public abstract class MobBase extends NPC implements Bloodable, Dropable {
 		}
 	}
 
-	public void hit(Hero hero) {
+	private void hit(Hero hero) {
 
 		if (this.getRectangle().intersects(hero.getRectangle())) {
 			int hurt_val = attack + new Random().nextInt(5) - 2;
@@ -64,6 +65,13 @@ public abstract class MobBase extends NPC implements Bloodable, Dropable {
 		if (hero.HP <= 0) {
 			hero.die();
 		}
+	}
+
+	@Override
+	public void beHited(int hurt_val) {
+		this.hit = true;
+		this.headInfos
+				.add(new HeadInfo(Integer.toString(hurt_val), this.getTrueX() + this.width / 3, this.y, Color.ORANGE));
 	}
 
 	@Override

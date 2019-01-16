@@ -1,6 +1,5 @@
 package com.neuedu.maplestory.constant;
 
-
 /**
  * Const_Arg
  * 
@@ -19,5 +18,5 @@ public class Constant {
 	public static final int SKILL_P = 10;
 	public static final int BOSS_BULLET_SPEED = 10;
 	public static final int HERO_BULLET_AXI = 15707;
-	public static final int BOOS_SHOOT_P = 10;
+	public static final int BOSS_SHOOT_P = 10;
 }

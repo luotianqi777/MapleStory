@@ -7,7 +7,6 @@ import com.neuedu.maplestory.util.ItemUtil;
 
 public class MobSnail extends MobBase {
 
-
 	public MobSnail(int x, int y, Direction dire) {
 		super(ImageUtil.imgMob.snail.move.l, // image
 				x, y, // location
@@ -85,6 +84,14 @@ public class MobSnail extends MobBase {
 			}
 			break;
 		}
+		if (!isOnGround()) {
+			if (this.dire == Direction.LEFT) {
+				this.dire = Direction.RIGHT;
+			} else {
+				this.dire = Direction.LEFT;
+			}
+		}
+
 		outOfBounds();
 	}
 

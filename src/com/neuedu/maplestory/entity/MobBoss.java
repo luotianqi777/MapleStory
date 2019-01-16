@@ -1,7 +1,8 @@
 package com.neuedu.maplestory.entity;
 
 import java.awt.Graphics;
-import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Random;
 
 import com.neuedu.maplestory.client.MapleStoryClient;
@@ -11,16 +12,16 @@ import com.neuedu.maplestory.util.ItemUtil;
 
 public class MobBoss extends MobBase {
 
-	private ArrayList<BossBullet> bullets = new ArrayList<>();
+	private List<BossBullet> bullets = new LinkedList<>();
 
 	public MobBoss(int x, int y, Direction dire) {
-		super(ImageUtil.imgMob.boos.move.l, // image
+		super(ImageUtil.imgMob.boss.move.l, // image
 				x, y, // location
 				dire, // direction
 				5000, // HP
 				300, // MP
 				3, // speed
-				15 // attack
+				5 // attack
 		);
 
 		this.jump = false;
@@ -34,7 +35,7 @@ public class MobBoss extends MobBase {
 	void shoot() {
 		/*
 		 */
-		if (new Random().nextInt(100) < Constant.BOOS_SHOOT_P) {
+		if (new Random().nextInt(100) < Constant.BOSS_SHOOT_P) {
 			Hero hero = MapleStoryClient.hero;
 			double atan = (double) ((hero.y - hero.height / 2) - (this.y - this.height / 2))
 					/ ((hero.x + hero.width / 2) - (this.getTrueX()) + this.width / 2);
@@ -56,13 +57,13 @@ public class MobBoss extends MobBase {
 		case LEFT:
 			switch (this.action) {
 			case DIE:
-				img = ImageUtil.imgMob.boos.die.l;
+				img = ImageUtil.imgMob.boss.die.l;
 				break;
 			case HIT:
-				img = ImageUtil.imgMob.boos.move.l;
+				img = ImageUtil.imgMob.boss.move.l;
 				break;
 			case WALK:
-				img = ImageUtil.imgMob.boos.move.l;
+				img = ImageUtil.imgMob.boss.move.l;
 				x -= speed;
 				break;
 			}
@@ -70,13 +71,13 @@ public class MobBoss extends MobBase {
 		case RIGHT:
 			switch (this.action) {
 			case DIE:
-				img = ImageUtil.imgMob.boos.die.r;
+				img = ImageUtil.imgMob.boss.die.r;
 				break;
 			case HIT:
-				img = ImageUtil.imgMob.boos.move.r;
+				img = ImageUtil.imgMob.boss.move.r;
 				break;
 			case WALK:
-				img = ImageUtil.imgMob.boos.move.r;
+				img = ImageUtil.imgMob.boss.move.r;
 				x += speed;
 				break;
 			}

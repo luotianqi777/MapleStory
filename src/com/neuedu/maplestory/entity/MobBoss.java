@@ -9,45 +9,47 @@ import com.neuedu.maplestory.constant.Constant;
 import com.neuedu.maplestory.util.ImageUtil;
 import com.neuedu.maplestory.util.ItemUtil;
 
-public class MobBoss extends MobBase{
-	
-	static{
-		addDropItem(new ItemUtil.shootsin());
-	}
-	
+public class MobBoss extends MobBase {
+
 	private ArrayList<BossBullet> bullets = new ArrayList<>();
+
 	public MobBoss(int x, int y, Direction dire) {
 		super(ImageUtil.imgMob.boos.move.l, // image
 				x, y, // location
 				dire, // direction
-				1000, // HP
+				5000, // HP
 				300, // MP
 				3, // speed
-				10 // attack
+				15 // attack
 		);
 
 		this.jump = false;
 		// dropChange
 		setDropChange(100);
+
+		addDropItem(new ItemUtil.shootsin());
+
 	}
+
 	void shoot() {
 		/*
 		 */
-		if(new Random().nextInt(50) > 35) {
+		if (new Random().nextInt(100) < Constant.BOOS_SHOOT_P) {
 			Hero hero = MapleStoryClient.hero;
-			double atan = (double) (hero.y - this.y) / (hero.x - this.getTrueX());
-			atan = Math.atan(atan) + (hero.x > this.getTrueX() ? Math.PI : 0);
-			bullets.add(new BossBullet(this.x, this.y, (atan + Math.PI)));
+			double atan = (double) ((hero.y - hero.height / 2) - (this.y - this.height / 2))
+					/ ((hero.x + hero.width / 2) - (this.getTrueX()) + this.width / 2);
+			atan = Math.atan(atan) + ((hero.x + hero.width / 2) > (this.getTrueX() + this.width / 2) ? Math.PI : 0);
+			bullets.add(new BossBullet(this.x + this.width / 2, this.y + this.height / 2, (atan + Math.PI)));
 		}
-		
 
 	}
+
 	public void move() {
 		super.move();
 		Hero hero = MapleStoryClient.hero;
-		if(this.x - hero.x > Constant.GAME_WIDTH / 2) {
+		if (this.getTrueX() > hero.x) {
 			this.dire = Direction.LEFT;
-		}  else if(hero.x - this.x > Constant.GAME_WIDTH / 2) {
+		} else {
 			this.dire = Direction.RIGHT;
 		}
 		switch (this.dire) {
@@ -61,7 +63,7 @@ public class MobBoss extends MobBase{
 				break;
 			case WALK:
 				img = ImageUtil.imgMob.boos.move.l;
-					x -= speed;
+				x -= speed;
 				break;
 			}
 			break;
@@ -75,20 +77,22 @@ public class MobBoss extends MobBase{
 				break;
 			case WALK:
 				img = ImageUtil.imgMob.boos.move.r;
-					x += speed;
+				x += speed;
 				break;
 			}
 			break;
 		}
 		outOfBounds();
-		
+
 	}
+
 	void moveBullets() {
 		for (Bullet bullet : bullets) {
 			bullet.move();
 			bullet.hit(MapleStoryClient.hero);
 		}
 	}
+
 	public void draw(Graphics g) {
 		move();
 		shoot();
@@ -96,14 +100,14 @@ public class MobBoss extends MobBase{
 		for (Bullet bullet : bullets) {
 			bullet.draw(g);
 		}
-		
+
 		super.draw(g);
-		
+
 	}
-	
+
 	@Override
 	void updataAction() {
-		if(walk) {
+		if (walk) {
 			this.action = MobAction.WALK;
 		}
 	}

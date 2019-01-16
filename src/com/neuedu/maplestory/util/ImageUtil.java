@@ -22,7 +22,7 @@ public class ImageUtil {
 
 		static {
 			for (int i = 0; i < 3; i++) {
-				rope[i] = GameUtil.getImage("com/neuedu/maplestory/img/rope/rope" + i + ".png");
+				rope[i] = GameUtil.getImage("com/neuedu/maplestory/img/rope/rope_" + i + ".png");
 			}
 		}
 
@@ -32,7 +32,7 @@ public class ImageUtil {
 
 		public static class rope {
 
-			public static int size = 2;
+			public static int size = 9;
 
 			public static Image[] rope = new Image[size];
 

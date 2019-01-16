@@ -182,11 +182,9 @@ public class Hero extends NPC implements Bloodable {
 				break;
 			case UP:
 				y -= speed / 2;
-				img = ImageUtil.imgHero.rope.rope;
 				break;
 			case DOWN:
 				y += speed / 2;
-				img = ImageUtil.imgHero.rope.rope;
 				break;
 			case GET:
 				break;
@@ -235,16 +233,17 @@ public class Hero extends NPC implements Bloodable {
 				break;
 			case UP:
 				y -= speed / 2;
-				img = ImageUtil.imgHero.rope.rope;
 				break;
 			case DOWN:
 				y += speed / 2;
-				img = ImageUtil.imgHero.rope.rope;
 				break;
 			case GET:
 				break;
 			}
 			break;
+		}
+		if (this.isOnRope()) {
+			img = ImageUtil.imgHero.rope.rope;
 		}
 		outOfBounds();
 	}
@@ -442,6 +441,7 @@ public class Hero extends NPC implements Bloodable {
 			right = true;
 			break;
 		case KeyEvent.VK_J:
+			HeroBullet.axi = Constant.HERO_BULLET_AXI;
 			shoot = true;
 			break;
 		case KeyEvent.VK_K:
@@ -454,6 +454,7 @@ public class Hero extends NPC implements Bloodable {
 			break;
 		case KeyEvent.VK_G:
 			shoot = !shoot;
+			HeroBullet.axi = Constant.HERO_BULLET_AXI;
 			break;
 		case KeyEvent.VK_W:
 			up = true;
@@ -485,7 +486,6 @@ public class Hero extends NPC implements Bloodable {
 			break;
 		case KeyEvent.VK_J:
 			shoot = false;
-			HeroBullet.axi = Constant.HERO_BULLET_AXI;
 			break;
 		case KeyEvent.VK_K:
 			break;

@@ -15,7 +15,7 @@ public abstract class MobBase extends NPC implements Bloodable, Dropable {
 	protected boolean walk;
 	protected MobAction action;
 	protected int attack;
-	protected static List<Item> dropItems = new LinkedList<>();
+	protected List<Item> dropItems = new LinkedList<>();
 
 	MobBase(Image[] img, int x, int y, Direction dire, int MAX_HP, int MAX_MP, int speed, int attack) {
 		super(img, x, y, MAX_HP, MAX_MP, speed, dire);
@@ -33,7 +33,7 @@ public abstract class MobBase extends NPC implements Bloodable, Dropable {
 		this.dropChance = chance;
 	}
 
-	static public void addDropItem(Item item) {
+	public void addDropItem(Item item) {
 		dropItems.add(item);
 	}
 

@@ -8,17 +8,12 @@ import com.neuedu.maplestory.util.ItemUtil;
 
 public class MobSnail extends MobBase {
 
-	static {
-		addDropItem(new ItemUtil.HP());
-		addDropItem(new ItemUtil.MP());
-		addDropItem(new ItemUtil.shoes());
-	}
 
 	public MobSnail(int x, int y, Direction dire) {
 		super(ImageUtil.imgMob.snail.move.l, // image
 				x, y, // location
 				dire, // direction
-				300, // HP
+				500, // HP
 				100, // MP
 				5, // speed
 				3 // attack
@@ -26,6 +21,10 @@ public class MobSnail extends MobBase {
 
 		// dropChange
 		setDropChange(40);
+
+		addDropItem(new ItemUtil.HP());
+		addDropItem(new ItemUtil.MP());
+		addDropItem(new ItemUtil.shoes());
 	}
 
 	public MobSnail() {
@@ -34,7 +33,6 @@ public class MobSnail extends MobBase {
 
 	@Override
 	public void draw(Graphics g) {
-		hit(MapleStoryClient.hero);
 		super.draw(g);
 		Hiting();
 	}
@@ -89,6 +87,7 @@ public class MobSnail extends MobBase {
 			break;
 		}
 		outOfBounds();
+		hit(MapleStoryClient.hero);
 	}
 
 }

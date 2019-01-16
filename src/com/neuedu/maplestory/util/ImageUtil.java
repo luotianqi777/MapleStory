@@ -139,6 +139,8 @@ public class ImageUtil {
 				skill[i] = GameUtil.getImage("com/neuedu/maplestory/img/bullet/bullet1_" + i + ".png");
 			}
 		}
+		
+		
 
 	}
 

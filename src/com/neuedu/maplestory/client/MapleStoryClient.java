@@ -14,6 +14,7 @@ import com.neuedu.maplestory.entity.Ground;
 import com.neuedu.maplestory.entity.Hero;
 import com.neuedu.maplestory.entity.Item;
 import com.neuedu.maplestory.entity.MobBase;
+import com.neuedu.maplestory.entity.MobBoss;
 import com.neuedu.maplestory.entity.NPC;
 import com.neuedu.maplestory.entity.MobSnail;
 import com.neuedu.maplestory.entity.Rope;
@@ -83,6 +84,8 @@ public class MapleStoryClient extends FrameUtil {
 	}
 
 	private void addMobs() {
+		// add BOOS
+		mobs.add(new MobBoss(Constant.GAME_WIDTH/2, Constant.GAME_HEIGHT/2, Direction.LEFT));
 		// add mobs
 		for (int i = 0; i < Constant.MOB_NUM; i++) {
 			mobs.add(new MobSnail((backGround.width + backGround.getX()) - i * backGround.width / Constant.MOB_NUM,

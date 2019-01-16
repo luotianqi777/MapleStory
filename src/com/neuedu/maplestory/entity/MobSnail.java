@@ -34,7 +34,6 @@ public class MobSnail extends MobBase {
 
 	@Override
 	public void draw(Graphics g) {
-		move();
 		hit(MapleStoryClient.hero);
 		super.draw(g);
 		Hiting();

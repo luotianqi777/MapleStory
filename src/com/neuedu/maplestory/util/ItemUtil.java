@@ -1,6 +1,7 @@
 package com.neuedu.maplestory.util;
 
 import com.neuedu.maplestory.client.MapleStoryClient;
+import com.neuedu.maplestory.entity.BulletType;
 import com.neuedu.maplestory.entity.Item;
 
 public class ItemUtil {
@@ -10,12 +11,12 @@ public class ItemUtil {
 		public HP() {
 			super(ImageUtil.imgItem.HP);
 		}
-		
+
 		@Override
 		public void work() {
 			MapleStoryClient.hero.HP += 50;
 		}
-		
+
 		@Override
 		public HP copy() {
 			return new HP();
@@ -28,12 +29,12 @@ public class ItemUtil {
 		public MP() {
 			super(ImageUtil.imgItem.MP);
 		}
-		
+
 		@Override
 		public void work() {
 			MapleStoryClient.hero.MP += 20;
 		}
-		
+
 		@Override
 		public MP copy() {
 			return new MP();
@@ -51,10 +52,29 @@ public class ItemUtil {
 		public void work() {
 			MapleStoryClient.hero.speed += 1;
 		}
-		
+
 		@Override
 		public shoes copy() {
 			return new shoes();
+		}
+
+	}
+
+	public static class shootsin extends Item {
+
+		public shootsin() {
+			super(ImageUtil.imgItem.sin);
+		}
+
+		@Override
+		public void work() {
+			MapleStoryClient.hero.bulletType = BulletType.SIN;
+		}
+
+		@Override
+		public shootsin copy() {
+			// TODO Auto-generated method stub
+			return new shootsin();
 		}
 
 	}

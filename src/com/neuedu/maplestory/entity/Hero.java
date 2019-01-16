@@ -25,11 +25,12 @@ public class Hero extends NPC implements Bloodable {
 	public boolean left, right;
 	public Action action;
 	public int kill;
+	public BulletType bulletType;
 
 	/**
 	 * shoot_Args
 	 */
-	private List<Bullet> bullets = new LinkedList<>();
+	private List<HeroBullet> bullets = new LinkedList<>();
 
 	public Hero(Image[] img, int x, int y) {
 		super(img, // image
@@ -45,6 +46,7 @@ public class Hero extends NPC implements Bloodable {
 		this.skill = false;
 		this.hit = false;
 		this.action = Action.STAND;
+		this.bulletType = BulletType.COMMEN;
 		this.kill = 0;
 		try {
 			this.width = img[0].getWidth(null);
@@ -284,14 +286,14 @@ public class Hero extends NPC implements Bloodable {
 		switch (this.dire) {
 		case LEFT:
 			for (int i = 0; i < 3; i++) {
-				bullets.add(new HeroBullet(this.x - this.width - MapleStoryClient.getBackX(), this.y + 10,
-						-abs - Math.PI - Math.PI / 10 * (i - 1)));
+				bullets.add(new HeroBullet(this.x - MapleStoryClient.getBackX(), this.y + 10,
+						-abs - Math.PI - Math.PI / 10 * (i - 1), bulletType));
 			}
 			break;
 		case RIGHT:
 			for (int i = 0; i < 3; i++) {
-				bullets.add(new HeroBullet(this.x + this.width * 2 - MapleStoryClient.getBackX(), this.y + 10,
-						abs - Math.PI / 10 * (i - 1)));
+				bullets.add(new HeroBullet(this.x + this.width - MapleStoryClient.getBackX(), this.y + 10,
+						abs - Math.PI / 10 * (i - 1), bulletType));
 			}
 			break;
 		}
@@ -314,8 +316,9 @@ public class Hero extends NPC implements Bloodable {
 		if (new Random().nextInt(100) < Constant.SKILL_P && MP > 0) {
 			MP -= 1;
 			int X = this.x - MapleStoryClient.getBackX();
-			for (Bullet bullet : bullets) {
+			for (HeroBullet bullet : bullets) {
 				bullet.grow();
+				bullet.type = BulletType.COMMEN;
 				double atan = (double) (bullet.y - this.y) / (bullet.x - X);
 				atan = Math.atan(atan) + (bullet.x > X ? Math.PI : 0);
 				bullet.setAngle(atan);
@@ -482,6 +485,7 @@ public class Hero extends NPC implements Bloodable {
 			break;
 		case KeyEvent.VK_J:
 			shoot = false;
+			HeroBullet.axi = Constant.HERO_BULLET_AXI;
 			break;
 		case KeyEvent.VK_K:
 			break;

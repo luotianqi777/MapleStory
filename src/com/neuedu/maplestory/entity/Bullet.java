@@ -10,8 +10,8 @@ import com.neuedu.maplestory.client.MapleStoryClient;
 import com.neuedu.maplestory.constant.Constant;
 
 public class Bullet extends Shape {
-	private double angle;
-	private double speed;
+	protected double angle;
+	protected double speed;
 	private boolean die;
 	private static final int growSpeed = Constant.GROW_SPEED;
 
@@ -22,12 +22,8 @@ public class Bullet extends Shape {
 		this.die = false;
 	}
 
-	public Bullet(Image[] img, int x, int y, double angle) {
-		this(img, x, y, angle, Constant.BULLET_SPEED);
-	}
-
 	public Bullet() {
-		this(null, 0, 0, 0);
+		this(null, 0, 0, 0, 0);
 	}
 
 	public void move() {
@@ -36,7 +32,7 @@ public class Bullet extends Shape {
 		outOfBounds();
 	}
 
-	private void outOfBounds() {
+	protected void outOfBounds() {
 
 		if (x < 0 || x > MapleStoryClient.backGround.width) {
 			die();
@@ -90,30 +86,26 @@ public class Bullet extends Shape {
 		this.angle += angle;
 	}
 
-	public boolean hit(NPC npc) {
+	public void hit(NPC npc) {
 
 		if (npc.isDie() || this.die) {
-			return false;
+			return;
 		}
+		int hurt_val = (int) Math.sqrt(this.width * this.height) + new Random().nextInt(9) - 4;
 		if (this.getRectangle().intersects(npc.getRectangle())) {
-			return true;
-		} else {
-			return false;
+			this.die();
+			npc.HP -= hurt_val;
+			if (npc.HP <= 0) {
+				npc.die();
+			} else {
+				npc.beHited(hurt_val);
+			}
 		}
 	}
 
 	public void hitNPCs(List<NPC> npcs) {
 		for (NPC npc : npcs) {
-			int hurt_val = (int) Math.sqrt(this.width * this.height) + new Random().nextInt(9) - 4;
-			if (this.hit(npc)) {
-				this.die();
-				npc.HP -= hurt_val;
-				if (npc.HP <= 0) {
-					npc.die();
-				} else {
-					npc.beHited(hurt_val);
-				}
-			}
+			hit(npc);
 		}
 	}
 

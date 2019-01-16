@@ -109,6 +109,7 @@ public abstract class MobBase extends NPC implements Bloodable, Dropable {
 
 	@Override
 	public void draw(Graphics g) {
+		move();
 		drawBloodBar(g, this, true);
 		super.draw(g);
 	}

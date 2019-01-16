@@ -143,6 +143,55 @@ public class ImageUtil {
 	}
 
 	public static class imgMob {
+
+		public static class boos {
+
+			public static class die {
+
+				public static final int size = 7;
+
+				public static Image[] r = new Image[size];
+
+				public static Image[] l = new Image[size];
+
+				static {
+
+					for (int i = 0; i < size; i++) {
+						l[i] = GameUtil.getImage("com/neuedu/maplestory/img/mob/boos/die_l/" + i + ".png");
+					}
+
+					for (int i = 0; i < size; i++) {
+						r[i] = GameUtil.getImage("com/neuedu/maplestory/img/mob/boos/die_r/" + i + ".png");
+					}
+
+				}
+
+			}
+
+			public static class move {
+
+				public static final int size = 6;
+
+				public static Image[] r = new Image[size];
+
+				public static Image[] l = new Image[size];
+
+				static {
+
+					for (int i = 0; i < size; i++) {
+						l[i] = GameUtil.getImage("com/neuedu/maplestory/img/mob/boos/move_l/" + i + ".png");
+					}
+
+					for (int i = 0; i < size; i++) {
+						r[i] = GameUtil.getImage("com/neuedu/maplestory/img/mob/boos/move_r/" + i + ".png");
+					}
+
+				}
+
+			}
+
+		}
+
 		public static class snail {
 
 			public static class die {
@@ -222,5 +271,6 @@ public class ImageUtil {
 
 		public static Image[] shoes = { GameUtil.getImage("com/neuedu/maplestory/img/item/shoes.png") };
 
+		public static Image[] sin = { GameUtil.getImage("com/neuedu/maplestory/img/item/sin.png") };
 	}
 }

@@ -1,5 +1,6 @@
 package com.neuedu.maplestory.constant;
 
+
 /**
  * Const_Arg
  * 
@@ -11,8 +12,9 @@ public class Constant {
 	public static final int GAME_HEIGHT = 900;
 	public static final double G = 9.8;
 	public static final int HERO_SPEED = 15;
+	public static final int HERO_MAX_SPEED = 25;
 	public static final int BULLET_SPEED = 30;
 	public static final int GROW_SPEED = 0;
-	public static final int MOB_NUM = 5;
-	public static final int SKILL_P = 20;
+	public static final int MOB_NUM = 10;
+	public static final int SKILL_P = 10;
 }

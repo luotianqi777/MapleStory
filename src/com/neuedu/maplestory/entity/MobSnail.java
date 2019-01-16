@@ -4,22 +4,32 @@ import java.awt.Graphics;
 
 import com.neuedu.maplestory.client.MapleStoryClient;
 import com.neuedu.maplestory.util.ImageUtil;
+import com.neuedu.maplestory.util.ItemUtil;
 
 public class MobSnail extends MobBase {
 
+	static {
+		addDropItem(new ItemUtil.HP());
+		addDropItem(new ItemUtil.MP());
+		addDropItem(new ItemUtil.shoes());
+	}
+
 	public MobSnail(int x, int y, Direction dire) {
-		super(ImageUtil.imgMob.snail.move.l, x, y, dire, 500, 5, 4);
+		super(ImageUtil.imgMob.snail.move.l, // image
+				x, y, // location
+				dire, // direction
+				300, // HP
+				100, // MP
+				5, // speed
+				3 // attack
+		);
+
+		// dropChange
+		setDropChange(40);
 	}
 
 	public MobSnail() {
 		this(0, 0, Direction.LEFT);
-	}
-
-	public void Hiting() {
-		if (hit && count == img.length) {
-			hit = false;
-			walk = true;
-		}
 	}
 
 	@Override
@@ -56,12 +66,9 @@ public class MobSnail extends MobBase {
 				img = ImageUtil.imgMob.snail.hit.l;
 				break;
 			case WALK:
-				if (!isOnGround()) {
-					fallCheck();
-				} else {
-					img = ImageUtil.imgMob.snail.move.l;
-					x -= speed;
-				}
+				fallCheck();
+				img = ImageUtil.imgMob.snail.move.l;
+				x -= speed;
 				break;
 			}
 			break;
@@ -74,27 +81,15 @@ public class MobSnail extends MobBase {
 				img = ImageUtil.imgMob.snail.hit.r;
 				break;
 			case WALK:
-				if (!isOnGround()) {
-					fallCheck();
-				} else {
-					img = ImageUtil.imgMob.snail.move.r;
-					x += speed;
-				}
+
+				fallCheck();
+				img = ImageUtil.imgMob.snail.move.r;
+				x += speed;
 				break;
 			}
 			break;
 		}
 		outOfBounds();
-	}
-
-	@Override
-	public void die() {
-		super.die();
-	}
-
-	@Override
-	public boolean isDie() {
-		return this.die && (count == img.length - 1);
 	}
 
 }

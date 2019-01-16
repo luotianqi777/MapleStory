@@ -1,30 +1,37 @@
 package com.neuedu.maplestory.entity;
 
+import java.awt.Graphics;
 import java.awt.Image;
+import java.util.LinkedList;
+import java.util.List;
 
 import com.neuedu.maplestory.client.MapleStoryClient;
 import com.neuedu.maplestory.constant.Constant;
 
-public class NPC extends Shape {
+public class NPC extends Shape implements Bloodable {
 
 	public int ABS;
-	public int HP;
-	public int MAX_HP;
+	public int HP, MP;
+	public int MAX_HP, MAX_MP;
 	public int speed;
 	public Direction dire;
-	public boolean die, jump, up, down;
+	protected boolean die, jump, up, down, hit;
 	public JP Jump = new JP();
+	public List<Hurt> hurts = new LinkedList<>();
 
-	public NPC(Image[] img, int x, int y, int MAX_HP, int speed, Direction dire) {
+	public NPC(Image[] img, int x, int y, int MAX_HP, int MAX_MP, int speed, Direction dire) {
 		super(img, x, y);
 		this.MAX_HP = MAX_HP;
+		this.MAX_MP = MAX_MP;
 		this.HP = this.MAX_HP;
+		this.MP = this.MAX_MP;
 		this.speed = speed;
 		this.dire = dire;
 		this.die = false;
 		this.jump = true;
 		this.up = false;
 		this.down = false;
+		this.hit = false;
 	}
 
 	/**
@@ -61,7 +68,6 @@ public class NPC extends Shape {
 	}
 
 	public void jumpInit() {
-
 		this.jump = false;
 		Jump.v0 = Jump.v_init;
 		Jump.jump_up = true;
@@ -86,15 +92,15 @@ public class NPC extends Shape {
 		}
 
 	}
-	
-	public void fallCheck(){
+
+	public void fallCheck() {
 		if (Jump.jump_up) {
 			fallInit();
 		}
 		fall();
 	}
-	
-	private int fix = 40;
+
+	private int fix = Ground.IMAGE.getHeight(null)/2 + this.height/2;
 
 	private Ground getGround() {
 		for (Ground ground : MapleStoryClient.backGround.grounds) {
@@ -129,6 +135,38 @@ public class NPC extends Shape {
 			}
 		}
 		return false;
+	}
+
+	public void die() {
+		this.die = true;
+	}
+
+	public boolean isDie() {
+		return this.die && (count == img.length - 1);
+	}
+
+	public void beHited(int hurt_val) {
+		this.hit = true;
+		this.hurts.add(new Hurt(hurt_val, this.getTrueX() + this.width / 3, this.y - this.height));
+	}
+
+	public void drawHurts(Graphics g) {
+
+		hurts.removeIf((e) -> {
+			return e.isDie();
+		});
+
+		for (Hurt hurt : hurts) {
+			hurt.draw(g);
+		}
+	}
+
+	@Override
+	public void draw(Graphics g) {
+
+		drawHurts(g);
+		super.draw(g);
+
 	}
 
 }

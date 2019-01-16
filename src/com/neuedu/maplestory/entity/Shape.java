@@ -10,7 +10,7 @@ public abstract class Shape {
 	public int y;
 	public int width;
 	public int height;
-	private int count;
+	protected int count;
 
 	public Shape(Image[] img, int x, int y) {
 		this.img = img;
@@ -22,16 +22,20 @@ public abstract class Shape {
 		}
 	}
 
-	void draw(Graphics g) {
+	public void draw(Graphics g) {
 		if (img == null) {
 			return;
 		}
 		count %= img.length;
-		g.drawImage(img[count], x, y, null);
+		g.drawImage(img[count], getTrueX(), y, null);
 		count++;
 	}
 
 	public Rectangle getRectangle() {
-		return new Rectangle(x, y, width, height);
+		return new Rectangle(getTrueX(), y, width, height);
+	}
+
+	public int getTrueX() {
+		return this.x;
 	}
 }

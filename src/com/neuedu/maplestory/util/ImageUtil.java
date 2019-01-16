@@ -12,19 +12,39 @@ import com.neuedu.maplestory.util.GameUtil;
 
 public class ImageUtil {
 
-	public static Image[] imgGround = new Image[1];
+	public static class imgBackGround {
 
-	static {
-		imgGround[0] = GameUtil.getImage("com/neuedu/maplestory/img/ground/ground.png");
-	}
+		public static Image[] background = { GameUtil.getImage("com/neuedu/maplestory/img/background/BackGround.png") };
 
-	public static Image[] imgBackground = new Image[1];
+		public static Image[] ground = { GameUtil.getImage("com/neuedu/maplestory/img/ground/ground.png") };
 
-	static {
-		imgBackground[0] = GameUtil.getImage("com/neuedu/maplestory/img/background/BackGround.png");
+		public static Image[] rope = new Image[3];
+
+		static {
+			for (int i = 0; i < 3; i++) {
+				rope[i] = GameUtil.getImage("com/neuedu/maplestory/img/rope/rope" + i + ".png");
+			}
+		}
+
 	}
 
 	public static class imgHero {
+
+		public static class rope {
+
+			public static int size = 2;
+
+			public static Image[] rope = new Image[size];
+
+			static {
+
+				for (int i = 0; i < size; i++) {
+					rope[i] = GameUtil.getImage("com/neuedu/maplestory/img/hero/rope/rope_" + i + ".png");
+				}
+
+			}
+		}
+
 		public static class walk {
 
 			public static final int size = 5;
@@ -43,7 +63,7 @@ public class ImageUtil {
 
 		static public class skill {
 
-			public static final int size = 5;
+			public static final int size = 4;
 
 			public static Image[] r = new Image[size];
 
@@ -51,8 +71,8 @@ public class ImageUtil {
 
 			static {
 				for (int i = 0; i < size; i++) {
-					r[i] = GameUtil.getImage("com/neuedu/maplestory/img/hero/shoot_r/shoot2_" + i + ".png");
-					l[i] = GameUtil.getImage("com/neuedu/maplestory/img/hero/shoot_l/shoot2_" + i + ".png");
+					r[i] = GameUtil.getImage("com/neuedu/maplestory/img/hero/skill_r/skill1_" + i + ".png");
+					l[i] = GameUtil.getImage("com/neuedu/maplestory/img/hero/skill_l/skill1_" + i + ".png");
 				}
 			}
 
@@ -97,8 +117,8 @@ public class ImageUtil {
 
 			static {
 				for (int i = 0; i < size; i++) {
-					r[i] = GameUtil.getImage("com/neuedu/maplestory/img/hero/skill_r/skill1_" + i + ".png");
-					l[i] = GameUtil.getImage("com/neuedu/maplestory/img/hero/skill_l/skill1_" + i + ".png");
+					r[i] = GameUtil.getImage("com/neuedu/maplestory/img/hero/shoot_r/shoot1_" + i + ".png");
+					l[i] = GameUtil.getImage("com/neuedu/maplestory/img/hero/shoot_l/shoot1_" + i + ".png");
 				}
 			}
 
@@ -194,12 +214,13 @@ public class ImageUtil {
 		}
 	}
 
-	public static Image[] rope = new Image[3];
+	public static class imgItem {
 
-	static {
-		for (int i = 0; i < 3; i++) {
-			rope[i] = GameUtil.getImage("com/neuedu/maplestory/img/rope/rope" + i + ".png");
-		}
+		public static Image[] HP = { GameUtil.getImage("com/neuedu/maplestory/img/item/HP.png") };
+
+		public static Image[] MP = { GameUtil.getImage("com/neuedu/maplestory/img/item/MP.png") };
+
+		public static Image[] shoes = { GameUtil.getImage("com/neuedu/maplestory/img/item/shoes.png") };
+
 	}
-
 }

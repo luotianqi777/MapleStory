@@ -3,38 +3,38 @@ package com.neuedu.maplestory.entity;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Random;
 
 import com.neuedu.maplestory.client.MapleStoryClient;
 
-public abstract class MobBase extends NPC implements Bloodable {
+public abstract class MobBase extends NPC implements Bloodable, Dropable {
 
-	protected boolean walk, hit;
+	protected int dropChance;
+	protected boolean walk;
 	protected MobAction action;
-	protected int count;
 	protected int attack;
+	protected static List<Item> dropItems = new LinkedList<>();
 
-	MobBase(Image[] img, int x, int y, Direction dire, int MAX_HP, int speed, int attack) {
-		super(img, x, y, MAX_HP, speed, dire);
+	MobBase(Image[] img, int x, int y, Direction dire, int MAX_HP, int MAX_MP, int speed, int attack) {
+		super(img, x, y, MAX_HP, MAX_MP, speed, dire);
 		this.walk = false;
-		this.hit = false;
 		this.action = MobAction.WALK;
 		this.attack = attack;
-		this.count = 0;
+		this.dropChance = 0;
 	}
 
 	public MobBase() {
-		this(null, 0, 0, Direction.LEFT, 100, 0, 0);
+		this(null, 0, 0, Direction.LEFT, 100, 0, 0, 0);
 	}
 
-	@Override
-	public void draw(Graphics g) {
-		if (img.length <= 0) {
-			return;
-		}
-		drawBloodBar(g, this, true);
-		count %= img.length;
-		g.drawImage(img[count], x + MapleStoryClient.getBackX(), y, null);
-		count++;
+	public void setDropChange(int chance) {
+		this.dropChance = chance;
+	}
+
+	static public void addDropItem(Item item) {
+		dropItems.add(item);
 	}
 
 	abstract void updataAction();
@@ -46,10 +46,19 @@ public abstract class MobBase extends NPC implements Bloodable {
 		}
 	}
 
+	public void Hiting() {
+		if (hit && count == img.length) {
+			hit = false;
+			walk = true;
+		}
+	}
+
 	public boolean hit(Hero hero) {
 
 		if (this.getRectangle().intersects(hero.getRectangle())) {
-			hero.HP -= attack;
+			int hurt_val = attack + new Random().nextInt(5) - 2;
+			hero.HP -= hurt_val;
+			hero.beHited(hurt_val);
 		}
 		if (hero.HP <= 0) {
 			hero.die();
@@ -57,12 +66,20 @@ public abstract class MobBase extends NPC implements Bloodable {
 		return false;
 	}
 
-	public void die() {
-		this.die = true;
+	@Override
+	public void dropItem() {
+		if (new Random().nextInt(100) < dropChance) {
+			Item item = dropItems.get(new Random().nextInt(dropItems.size())).copy();
+			item.x = this.x;
+			item.y = this.y;
+			item.jump = true;
+			MapleStoryClient.items.add(item);
+		}
 	}
 
-	public boolean isDie() {
-		return this.die;
+	@Override
+	public void die() {
+		super.die();
 	}
 
 	void outOfBounds() {
@@ -74,12 +91,26 @@ public abstract class MobBase extends NPC implements Bloodable {
 			x = MapleStoryClient.backGround.width - this.width;
 			this.dire = Direction.LEFT;
 		}
+		if (y > MapleStoryClient.backGround.height) {
+			die();
+		}
 	}
 
 	@Override
 	public Rectangle getRectangle() {
 
-		return new Rectangle(x + MapleStoryClient.getBackX(), y, width, height);
+		return new Rectangle(getTrueX(), y, width, height);
+	}
+
+	@Override
+	public int getTrueX() {
+		return super.getTrueX() + MapleStoryClient.getBackX();
+	}
+
+	@Override
+	public void draw(Graphics g) {
+		drawBloodBar(g, this, true);
+		super.draw(g);
 	}
 
 }

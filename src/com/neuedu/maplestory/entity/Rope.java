@@ -10,7 +10,7 @@ public class Rope extends Shape {
 	int length;
 
 	public Rope(int x, int y, int length) {
-		super(ImageUtil.rope, x, y);
+		super(ImageUtil.imgBackGround.rope, x, y);
 		this.length = length;
 	}
 
@@ -19,7 +19,7 @@ public class Rope extends Shape {
 	}
 
 	@Override
-	void draw(Graphics g) {
+	public void draw(Graphics g) {
 		g.drawImage(img[0], x, y, null);
 		for (int i = 0; i < length; i++) {
 			g.drawImage(img[1], x + 3, y + img[0].getHeight(null) + img[1].getHeight(null) * i, null);
@@ -33,4 +33,5 @@ public class Rope extends Shape {
 		return new Rectangle(x, y, img[0].getWidth(null),
 				img[0].getHeight(null) + length * img[1].getHeight(null) + img[2].getHeight(null));
 	}
+	
 }

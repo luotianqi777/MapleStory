@@ -4,10 +4,10 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
 import java.util.List;
+import java.util.Random;
 
 import com.neuedu.maplestory.client.MapleStoryClient;
 import com.neuedu.maplestory.constant.Constant;
-import com.neuedu.maplestory.util.ImageUtil;
 
 public class Bullet extends Shape {
 	private double angle;
@@ -22,24 +22,12 @@ public class Bullet extends Shape {
 		this.die = false;
 	}
 
-	public Bullet(int x, int y, double angle) {
-		this(ImageUtil.imgBullet.norml, x, y, angle, Constant.BULLET_SPEED);
+	public Bullet(Image[] img, int x, int y, double angle) {
+		this(img, x, y, angle, Constant.BULLET_SPEED);
 	}
 
 	public Bullet() {
-		this(0, 0, 0);
-	}
-
-	public Bullet(Bullet bullet) {
-		this();
-		this.img = bullet.img;
-		this.x = bullet.x;
-		this.y = bullet.y;
-		this.width = bullet.width;
-		this.height = bullet.height;
-		this.angle = bullet.angle;
-		this.speed = bullet.speed;
-		this.die = bullet.die;
+		this(null, 0, 0, 0);
 	}
 
 	public void move() {
@@ -73,7 +61,7 @@ public class Bullet extends Shape {
 			return;
 		}
 		count %= img.length;
-		g.drawImage(img[count], x + MapleStoryClient.getBackX(), y, this.width, this.height, null);
+		g.drawImage(img[count], getTrueX(), y, this.width, this.height, null);
 		count++;
 	}
 
@@ -102,27 +90,28 @@ public class Bullet extends Shape {
 		this.angle += angle;
 	}
 
-	public boolean hit(MobBase mob) {
-		if (mob.isDie() || this.die) {
+	public boolean hit(NPC npc) {
+
+		if (npc.isDie() || this.die) {
 			return false;
 		}
-		if (this.getRectangle().intersects(mob.getRectangle())) {
+		if (this.getRectangle().intersects(npc.getRectangle())) {
 			return true;
 		} else {
 			return false;
 		}
 	}
 
-	public void hitMods(List<MobBase> mobs) {
-		for (MobBase mob : mobs) {
-			int hurt_val = (int) Math.sqrt(this.width * this.height);
-			if (this.hit(mob)) {
+	public void hitNPCs(List<NPC> npcs) {
+		for (NPC npc : npcs) {
+			int hurt_val = (int) Math.sqrt(this.width * this.height) + new Random().nextInt(9) - 4;
+			if (this.hit(npc)) {
 				this.die();
-				mob.HP -= hurt_val;
-				if (mob.HP <= 0) {
-					mob.die();
+				npc.HP -= hurt_val;
+				if (npc.HP <= 0) {
+					npc.die();
 				} else {
-					mob.hit = true;
+					npc.beHited(hurt_val);
 				}
 			}
 		}
@@ -130,6 +119,11 @@ public class Bullet extends Shape {
 
 	@Override
 	public Rectangle getRectangle() {
-		return new Rectangle(x + MapleStoryClient.getBackX(), y, width, height);
+		return new Rectangle(getTrueX(), y, width, height);
+	}
+
+	@Override
+	public int getTrueX() {
+		return super.getTrueX() + MapleStoryClient.getBackX();
 	}
 }

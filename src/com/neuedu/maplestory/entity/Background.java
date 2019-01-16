@@ -5,6 +5,7 @@ import java.awt.Image;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.neuedu.maplestory.client.MapleStoryClient;
 import com.neuedu.maplestory.constant.Constant;
 import com.neuedu.maplestory.util.ImageUtil;
 
@@ -36,7 +37,7 @@ public class Background extends Shape {
 	}
 
 	public Background() {
-		this(ImageUtil.imgBackground, 0, 0);
+		this(ImageUtil.imgBackGround.background, 0, 0);
 		this.y = Constant.GAME_HEIGHT - this.height;
 	}
 
@@ -53,6 +54,7 @@ public class Background extends Shape {
 	}
 
 	public void move(Direction direction) {
+		this.speed = MapleStoryClient.hero.speed;
 		switch (direction) {
 		case LEFT:
 			this.x -= speed;

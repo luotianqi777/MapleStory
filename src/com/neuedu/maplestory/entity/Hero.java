@@ -92,7 +92,7 @@ public class Hero extends NPC implements Bloodable {
 		}
 
 		if (skill) {
-			skill();
+			skill(this.x + this.width / 2, this.y + this.height / 2);
 			this.action = Action.SKILL;
 		}
 
@@ -312,16 +312,17 @@ public class Hero extends NPC implements Bloodable {
 	/**
 	 * skill
 	 */
-	void skill() {
-		if (new Random().nextInt(100) < Constant.SKILL_P && MP > 0) {
+	void skill(int obj_x, int obj_y) {
+		if (new Random().nextInt(100) < Constant.SKILL_P) {
 			MP -= 1;
-			int X = this.x - MapleStoryClient.getBackX();
 			for (HeroBullet bullet : bullets) {
-				bullet.grow();
-				bullet.type = BulletType.COMMEN;
-				double atan = (double) (bullet.y - this.y) / (bullet.x - X);
-				atan = Math.atan(atan) + (bullet.x > X ? Math.PI : 0);
-				bullet.setAngle(atan);
+				if (MP > 0) {
+					bullet.grow();
+					bullet.type = BulletType.COMMEN;
+					double atan = (double) (bullet.y - obj_y) / (bullet.getTrueX() - obj_x);
+					atan = Math.atan(atan) + (bullet.getTrueX() > obj_x ? Math.PI : 0);
+					bullet.setAngle(atan);
+				}
 			}
 		}
 	}
@@ -400,7 +401,6 @@ public class Hero extends NPC implements Bloodable {
 		g.drawString("Skill: " + (hero.skill ? "ON" : "OFF"), Constant.GAME_WIDTH - 150, 190);
 		g.setColor(c);
 	}
-	
 
 	/**
 	 * draw

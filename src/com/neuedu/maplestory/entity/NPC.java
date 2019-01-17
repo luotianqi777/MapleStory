@@ -151,9 +151,10 @@ public class NPC extends Shape implements Bloodable {
 	}
 
 	public void beHited(int hurt_val) {
+		this.HP -= hurt_val;
 		this.hit = true;
-		this.headInfos.add(new HeadInfo(Integer.toString(hurt_val), this.getTrueX() + this.width / 3,
-				this.y, Color.RED));
+		this.headInfos
+				.add(new HeadInfo(Integer.toString(hurt_val), this.getTrueX() + this.width / 3, this.y, Color.RED));
 	}
 
 	public void drawHeadInfos(Graphics g) {

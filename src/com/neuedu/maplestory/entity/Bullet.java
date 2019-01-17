@@ -93,14 +93,12 @@ public class Bullet extends Shape {
 		if (npc.isDie() || this.die) {
 			return;
 		}
-		int hurt_val = attack + new Random().nextInt(9) - 4;
+		int hurt_val = attack + new Random().nextInt(5);
 		if (this.getRectangle().intersects(npc.getRectangle())) {
 			this.die();
-			npc.HP -= hurt_val;
+			npc.beHited(hurt_val);
 			if (npc.HP <= 0) {
 				npc.die();
-			} else {
-				npc.beHited(hurt_val);
 			}
 		}
 	}

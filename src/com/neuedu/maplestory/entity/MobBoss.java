@@ -35,32 +35,36 @@ public class MobBoss extends MobBase {
 	void shoot() {
 
 		int lost = (MAX_HP - HP) * 10 / MAX_HP;
-
-		if (new Random().nextInt(100) < Constant.BOSS_SHOOT_P) {
-			Hero hero = MapleStoryClient.hero;
-			double atan = (double) ((hero.y - hero.height / 2) - (this.y - this.height / 2))
-					/ ((hero.x + hero.width / 2) - (this.getTrueX()) + this.width / 2);
-			atan = Math.atan(atan) + ((hero.x + hero.width / 2) > (this.getTrueX() + this.width / 2) ? Math.PI : 0);
-			bullets.add(new BossBullet(this.x + this.width / 2, this.y + this.height / 2, (atan + Math.PI)));
+		Hero hero = MapleStoryClient.hero;
+		int hero_center_x = hero.x + hero.width / 2;
+		int hero_center_y = hero.y + hero.height / 2;
+		int boss_center_x = this.getTrueX() + this.width / 2;
+		int boss_center_y = this.y + this.height / 2;
+		if (new Random().nextInt(100) < Constant.BOSS_SHOOT_P + lost) {
+			double atan = (double) (boss_center_y - hero_center_y) / (boss_center_x - hero_center_x);
+			atan = Math.atan(atan) + (hero_center_x > boss_center_x ? 0 : Math.PI);
+			bullets.add(new BossBullet(this.x + this.width / 2, boss_center_y, atan));
 		}
 
+		// skill
 		if (new Random().nextInt(1000) < Constant.BOSS_SKILL_P + lost) {
-			MP -= 10;
 			skill();
 		}
 	}
 
-	public void skill() {
-
+	void skill() {
 		Hero hero = MapleStoryClient.hero;
-		int X = hero.x - MapleStoryClient.getBackX();
-
+		int hero_center_x = hero.getTrueX() + hero.width / 2;
+		int hero_center_y = hero.y + hero.height / 2;
+		MP -= 10;
 		for (BossBullet bullet : bullets) {
-			double atan = (double) (bullet.y - hero.y) / (bullet.x - X);
-			atan = Math.atan(atan) + (bullet.x > X ? Math.PI : 0);
+			bullet.speed *= 2;
+			int bullet_center_x = bullet.getTrueX() + bullet.width / 2;
+			int bullet_center_y = bullet.y + bullet.height / 2;
+			double atan = (double) (bullet_center_y - hero_center_y) / (bullet_center_x - hero_center_x);
+			atan = Math.atan(atan) + (hero_center_x > bullet_center_x ? 0 : Math.PI);
 			bullet.setAngle(atan);
 		}
-
 	}
 
 	public void move() {
@@ -106,7 +110,10 @@ public class MobBoss extends MobBase {
 	}
 
 	void moveBullets() {
-		for (Bullet bullet : bullets) {
+		bullets.removeIf((e) -> {
+			return e.isDie();
+		});
+		for (BossBullet bullet : bullets) {
 			bullet.move();
 			bullet.hit(MapleStoryClient.hero);
 		}
@@ -116,7 +123,7 @@ public class MobBoss extends MobBase {
 		move();
 		shoot();
 		moveBullets();
-		for (Bullet bullet : bullets) {
+		for (BossBullet bullet : bullets) {
 			bullet.draw(g);
 		}
 
@@ -130,4 +137,5 @@ public class MobBoss extends MobBase {
 			this.action = MobAction.WALK;
 		}
 	}
+
 }

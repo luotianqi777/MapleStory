@@ -66,9 +66,9 @@ public class MobBoss extends MobBase {
 	public void move() {
 		super.move();
 		Hero hero = MapleStoryClient.hero;
-		if (this.getTrueX() > hero.x) {
+		if (this.getTrueX() > hero.x + this.width * 3 / 2) {
 			this.dire = Direction.LEFT;
-		} else {
+		} else if (this.getTrueX() < hero.x - this.width * 3 / 2) {
 			this.dire = Direction.RIGHT;
 		}
 		switch (this.dire) {

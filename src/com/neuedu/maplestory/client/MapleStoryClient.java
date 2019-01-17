@@ -102,7 +102,7 @@ public class MapleStoryClient extends FrameUtil {
 	void createBackground() {
 
 		backGround.addRope(new Rope(400, 300, 10));
-		backGround.addRope(new Rope(1300, 450, 4));
+		backGround.addRope(new Rope(1800, 450, 4));
 		backGround.addRope(new Rope(1000, 120, 5));
 
 		for (int i = 0; i < 9; i++) {

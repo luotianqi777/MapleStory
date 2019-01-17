@@ -38,9 +38,19 @@ public abstract class MobBase extends NPC implements Bloodable, Dropable {
 		dropItems.add(item);
 	}
 
+	void updataHP() {
+		if (HP > MAX_HP) {
+			HP = MAX_HP;
+		}
+		if (MP > MAX_MP) {
+			MP = MAX_MP;
+		}
+	}
+
 	abstract void updataAction();
 
 	void move() {
+		updataHP();
 		updataAction();
 		if (jump) {
 			jump();

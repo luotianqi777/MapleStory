@@ -35,6 +35,7 @@ public class MapleStoryClient extends FrameUtil {
 	static public List<NPC> mobs = new LinkedList<>();
 	static public List<Item> items = new LinkedList<>();
 	private final MusicUtil bgm = new MusicUtil(MusicUtil.bgm, true);
+	private boolean boss = true;
 
 	static public int getBackX() {
 		return backGround.getX();
@@ -54,6 +55,7 @@ public class MapleStoryClient extends FrameUtil {
 			return e.isDie();
 		});
 		if (mobs.isEmpty()) {
+			boss = !boss;
 			addMobs();
 		}
 		// clear items
@@ -84,13 +86,16 @@ public class MapleStoryClient extends FrameUtil {
 
 	private void addMobs() {
 		// add BOOS
-		mobs.add(new MobBoss(Constant.GAME_WIDTH / 2,
-				new Random().nextInt(Constant.GAME_HEIGHT * 3 / 4 + Constant.GAME_HEIGHT / 5), Direction.LEFT));
-		// add mobs
-		for (int i = 0; i < Constant.MOB_NUM; i++) {
-			mobs.add(new MobSnail((backGround.width + backGround.getX()) - i * backGround.width / Constant.MOB_NUM,
-					new Random().nextInt(Constant.GAME_HEIGHT),
-					(new Random().nextInt(2) == 0 ? Direction.LEFT : Direction.RIGHT)));
+		if (boss) {
+			mobs.add(new MobBoss(Constant.GAME_WIDTH / 2,
+					new Random().nextInt(Constant.GAME_HEIGHT / 2 + Constant.GAME_HEIGHT / 5), Direction.LEFT));
+		} else {
+			// add mobs
+			for (int i = 0; i < Constant.MOB_NUM; i++) {
+				mobs.add(new MobSnail((backGround.width + backGround.getX()) - i * backGround.width / Constant.MOB_NUM,
+						new Random().nextInt(Constant.GAME_HEIGHT - Ground.IMAGE.getHeight(null)),
+						(new Random().nextInt(2) == 0 ? Direction.LEFT : Direction.RIGHT)));
+			}
 		}
 	}
 

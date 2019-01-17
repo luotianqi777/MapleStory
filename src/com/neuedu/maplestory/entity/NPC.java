@@ -46,6 +46,8 @@ public class NPC extends Shape implements Bloodable {
 		public final double t = 0.5;
 		public double delta_height = 0;
 		public boolean jump_up = true;
+		public boolean jumping = false;
+		public boolean falling = false;
 	};
 
 	/**
@@ -56,6 +58,7 @@ public class NPC extends Shape implements Bloodable {
 			Jump.jump_up = isOnGround();
 		}
 		if (Jump.jump_up) {
+			Jump.jumping = true;
 			Jump.vt = Jump.v0 - Jump.g * Jump.t;
 			Jump.delta_height = Jump.v0 * Jump.t;
 			Jump.v0 = Jump.vt;
@@ -72,12 +75,14 @@ public class NPC extends Shape implements Bloodable {
 		this.jump = false;
 		Jump.v0 = Jump.v_init;
 		Jump.jump_up = true;
+		Jump.jumping = false;
 		Jump.vt = 0;
 	}
 
 	public void fallInit() {
 
 		Jump.jump_up = false;
+		Jump.falling = true;
 		Jump.vt = 0;
 		Jump.v0 = 0;
 	}
@@ -95,10 +100,11 @@ public class NPC extends Shape implements Bloodable {
 	}
 
 	public void fallCheck() {
-		if (Jump.jump_up) {
+		if (!Jump.jumping && !isOnGround() && !isOnRope()) {
 			fallInit();
+		} else if (Jump.falling) {
+			fall();
 		}
-		fall();
 	}
 
 	private int fix = Ground.IMAGE.getHeight(null) / 2 + this.height;
@@ -122,6 +128,7 @@ public class NPC extends Shape implements Bloodable {
 		}
 		y = getGround().y - this.height + 10;
 		jump = false;
+		Jump.jumping = false;
 	}
 
 	public Boolean isOnGround() {
@@ -152,8 +159,8 @@ public class NPC extends Shape implements Bloodable {
 
 	public void beHited(int hurt_val) {
 		this.hit = true;
-		this.headInfos.add(new HeadInfo(Integer.toString(hurt_val), this.getTrueX() + this.width / 3,
-				this.y, Color.RED));
+		this.headInfos
+				.add(new HeadInfo(Integer.toString(hurt_val), this.getTrueX() + this.width / 3, this.y, Color.RED));
 	}
 
 	public void drawHeadInfos(Graphics g) {

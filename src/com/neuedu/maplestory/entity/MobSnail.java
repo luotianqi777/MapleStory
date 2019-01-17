@@ -61,7 +61,6 @@ public class MobSnail extends MobBase {
 				img = ImageUtil.imgMob.snail.hit.l;
 				break;
 			case WALK:
-				fallCheck();
 				img = ImageUtil.imgMob.snail.move.l;
 				x -= speed;
 				break;
@@ -77,7 +76,6 @@ public class MobSnail extends MobBase {
 				break;
 			case WALK:
 
-				fallCheck();
 				img = ImageUtil.imgMob.snail.move.r;
 				x += speed;
 				break;
@@ -91,6 +89,7 @@ public class MobSnail extends MobBase {
 				this.dire = Direction.LEFT;
 			}
 		}
+		fallCheck();
 
 		outOfBounds();
 	}

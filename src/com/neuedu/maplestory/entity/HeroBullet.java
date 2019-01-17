@@ -11,7 +11,7 @@ public class HeroBullet extends Bullet {
 	protected static int axi = Constant.HERO_BULLET_AXI;
 
 	public HeroBullet(int x, int y, double angle, BulletType type) {
-		super(ImageUtil.imgBullet.norml, x, y, angle, Constant.HERO_BULLET_SPEED);
+		super(ImageUtil.imgBullet.norml, x, y, angle, Constant.HERO_BULLET_SPEED, 20);
 		this.type = type;
 		dire = MapleStoryClient.hero.dire;
 	}

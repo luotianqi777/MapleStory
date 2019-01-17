@@ -101,10 +101,7 @@ public class Hero extends NPC implements Bloodable {
 			if (!up || !isOnRope()) {
 				jump();
 			} else {
-				this.jump = false;
-				Jump.v0 = Jump.v_init;
-				Jump.jump_up = true;
-				Jump.vt = 0;
+				jumpInit();
 			}
 		}
 
@@ -124,9 +121,7 @@ public class Hero extends NPC implements Bloodable {
 			this.action = Action.GET;
 			getItems();
 		}
-		if (!isOnGround() && !Jump.jump_up && !(up || down)) {
-			fallCheck();
-		}
+
 	}
 
 	/**
@@ -142,16 +137,12 @@ public class Hero extends NPC implements Bloodable {
 		case LEFT:
 			switch (this.action) {
 			case WALK:
-				if (!isOnGround()) {
-					fallCheck();
-				}
 				x -= speed;
 				img = ImageUtil.imgHero.walk.l;
 
 				break;
 			case SHOOT:
 				if (left) {
-					fallCheck();
 					x -= speed;
 				}
 				img = ImageUtil.imgHero.shoot.l;
@@ -173,8 +164,6 @@ public class Hero extends NPC implements Bloodable {
 				break;
 			case SKILL:
 				if (left) {
-					fallCheck();
-					fall();
 					x -= speed;
 				}
 				img = ImageUtil.imgHero.skill.l;
@@ -194,16 +183,12 @@ public class Hero extends NPC implements Bloodable {
 		case RIGHT:
 			switch (this.action) {
 			case WALK:
-				if (!isOnGround()) {
-					fallCheck();
-				}
 				x += speed;
 				img = ImageUtil.imgHero.walk.r;
 
 				break;
 			case SHOOT:
 				if (right) {
-					fallCheck();
 					x += speed;
 				}
 				img = ImageUtil.imgHero.shoot.r;
@@ -225,7 +210,6 @@ public class Hero extends NPC implements Bloodable {
 				break;
 			case SKILL:
 				if (right) {
-					fallCheck();
 					x += speed;
 				}
 				img = ImageUtil.imgHero.skill.r;
@@ -243,9 +227,13 @@ public class Hero extends NPC implements Bloodable {
 			}
 			break;
 		}
-		if (this.isOnRope()) {
+		if (this.action!Jump.jumping && !isOnGround()) {
+			fallCheck();
+		}
+		if (isOnRope() && !Jump.jumping) {
 			img = ImageUtil.imgHero.rope.rope;
 		}
+
 		outOfBounds();
 	}
 
@@ -354,7 +342,6 @@ public class Hero extends NPC implements Bloodable {
 	void onTheGround() {
 		super.onTheGround();
 		this.action = Action.WALK;
-		jump = false;
 	}
 
 	@Override
@@ -400,7 +387,6 @@ public class Hero extends NPC implements Bloodable {
 		g.drawString("Skill: " + (hero.skill ? "ON" : "OFF"), Constant.GAME_WIDTH - 150, 190);
 		g.setColor(c);
 	}
-	
 
 	/**
 	 * draw

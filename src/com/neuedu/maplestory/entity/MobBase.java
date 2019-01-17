@@ -57,6 +57,7 @@ public abstract class MobBase extends NPC implements Bloodable, Dropable {
 
 	private void hit(Hero hero) {
 
+		
 		if (this.getRectangle().intersects(hero.getRectangle())) {
 			int hurt_val = attack + new Random().nextInt(5) - 2;
 			hero.HP -= hurt_val;

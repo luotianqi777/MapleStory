@@ -14,16 +14,18 @@ public class Bullet extends Shape {
 	protected double speed;
 	private boolean die;
 	private static final int growSpeed = Constant.GROW_SPEED;
+	private int attack;
 
-	public Bullet(Image[] img, int x, int y, double angle, double speed) {
+	public Bullet(Image[] img, int x, int y, double angle, double speed, int attack) {
 		super(img, x, y);
 		this.angle = angle;
 		this.speed = speed;
 		this.die = false;
+		this.attack = attack;
 	}
 
 	public Bullet() {
-		this(null, 0, 0, 0, 0);
+		this(null, 0, 0, 0, 0, 0);
 	}
 
 	public void move() {
@@ -91,7 +93,7 @@ public class Bullet extends Shape {
 		if (npc.isDie() || this.die) {
 			return;
 		}
-		int hurt_val = (int) Math.sqrt(this.width * this.height) + new Random().nextInt(9) - 4;
+		int hurt_val = attack + new Random().nextInt(9) - 4;
 		if (this.getRectangle().intersects(npc.getRectangle())) {
 			this.die();
 			npc.HP -= hurt_val;

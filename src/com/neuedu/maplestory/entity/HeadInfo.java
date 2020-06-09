@@ -15,7 +15,7 @@ public class HeadInfo {
 		this.x = x;
 		this.y = y;
 		this.color = color;
-		font = new Font("Î¢ÈíÑÅºÚ", Font.PLAIN, 20);
+		font = new Font("Monaco", Font.PLAIN, 20);
 	}
 
 	public void draw(Graphics g) {

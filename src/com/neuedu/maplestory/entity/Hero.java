@@ -281,7 +281,7 @@ public class Hero extends NPC implements Bloodable {
 	 * shoot Method
 	 */
 	void shoot() {
-		// 调整角度
+		// 锟斤拷锟斤拷锟角讹拷
 		double abs = (new Random().nextDouble()) * Math.PI / 8;
 		switch (this.dire) {
 		case LEFT:
@@ -374,12 +374,12 @@ public class Hero extends NPC implements Bloodable {
 		}
 
 		g.setColor(Color.BLUE);
-		g.setFont(new Font("微软雅黑", Font.BOLD, 24));
-		g.drawString("攻击:J 跳跃:K", info_x, info_y[0]);
-		g.drawString("拾取:空格", info_x, info_y[1]);
-		g.drawString("上/下绳子:W/D", info_x, info_y[2]);
-		g.drawString("开/关技能:L", info_x, info_y[3]);
-		g.drawString("开/关挂机:G", info_x, info_y[4]);
+		g.setFont(new Font("Monaco", Font.BOLD, 24));
+		g.drawString("Attack:J Jump:K", info_x, info_y[0]);
+		g.drawString("pick up:space", info_x, info_y[1]);
+		g.drawString("Left/Right Move:W/D", info_x, info_y[2]);
+		g.drawString("Skill On/Off:L", info_x, info_y[3]);
+		g.drawString("Auto Attack On/Off:G", info_x, info_y[4]);
 
 		g.setColor(c);
 		g.setFont(f);
@@ -482,7 +482,7 @@ public class Hero extends NPC implements Bloodable {
 		case KeyEvent.VK_S:
 			down = true;
 			break;
-		case 32: // 空格
+		case 32: // 锟秸革拷
 			get = true;
 			break;
 		default:
@@ -517,7 +517,7 @@ public class Hero extends NPC implements Bloodable {
 		case KeyEvent.VK_S:
 			down = false;
 			break;
-		case 32: // 空格
+		case 32: // 锟秸革拷
 			get = false;
 			break;
 		default:

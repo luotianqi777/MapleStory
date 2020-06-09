@@ -59,7 +59,7 @@ public class ItemUtil {
 		public void work() {
 			MapleStoryClient.hero.speed += 1;
 			MapleStoryClient.hero.headInfos
-					.add(new HeadInfo("速度增加", MapleStoryClient.hero.x, MapleStoryClient.hero.y, Color.GRAY));
+					.add(new HeadInfo("speed up", MapleStoryClient.hero.x, MapleStoryClient.hero.y, Color.GRAY));
 		}
 
 		@Override
@@ -79,7 +79,7 @@ public class ItemUtil {
 		public void work() {
 			MapleStoryClient.hero.bulletType = BulletType.SIN;
 			MapleStoryClient.hero.headInfos
-					.add(new HeadInfo("特殊弹道", MapleStoryClient.hero.x, MapleStoryClient.hero.y, Color.CYAN));
+					.add(new HeadInfo("bullet changed", MapleStoryClient.hero.x, MapleStoryClient.hero.y, Color.CYAN));
 		}
 
 		@Override

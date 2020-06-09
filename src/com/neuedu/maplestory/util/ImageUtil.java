@@ -1,7 +1,6 @@
 package com.neuedu.maplestory.util;
 
 import java.awt.Image;
-import com.neuedu.maplestory.util.GameUtil;
 
 /**
  * All Image
